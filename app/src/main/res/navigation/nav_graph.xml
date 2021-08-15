@@ -9,5 +9,14 @@
         android:id="@+id/listaAgenda"
         android:name="com.example.crudagenda.ListaAgenda"
         android:label="fragment_lista_agenda"
-        tools:layout="@layout/fragment_lista_agenda" />
+        tools:layout="@layout/fragment_lista_agenda" >
+        <action
+            android:id="@+id/action_listaAgenda_to_addContact"
+            app:destination="@id/addContact" />
+    </fragment>
+    <fragment
+        android:id="@+id/addContact"
+        android:name="com.example.crudagenda.AddContact"
+        android:label="fragment_add_contact"
+        tools:layout="@layout/fragment_add_contact" />
 </navigation>

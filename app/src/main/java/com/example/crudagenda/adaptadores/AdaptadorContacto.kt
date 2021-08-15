@@ -15,21 +15,17 @@ class AdaptadorContacto(private val contacto: List<Contacto>) :
 
     }
 
-    // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_contacto, viewGroup, false)
 
         return ViewHolder(view)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = contacto.size
 
 }
