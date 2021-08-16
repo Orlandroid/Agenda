@@ -12,7 +12,17 @@ class AdaptadorContacto(private val contacto: List<Contacto>) :
     RecyclerView.Adapter<AdaptadorContacto.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val name: TextView = view.findViewById(R.id.item_nombre)
+        val phone: TextView = view.findViewById(R.id.item_telefono)
+        val birthday: TextView = view.findViewById(R.id.item_cumple)
+        val note: TextView = view.findViewById(R.id.item_nota)
 
+        fun bind(contact: Contacto) {
+            name.text = contact.name
+            phone.text = contact.phone
+            birthday.text = contact.birthday
+            note.text = contact.nota
+        }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +33,8 @@ class AdaptadorContacto(private val contacto: List<Contacto>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
+        val contacto = contacto[position]
+        viewHolder.bind(contacto)
     }
 
     override fun getItemCount() = contacto.size
