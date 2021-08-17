@@ -39,6 +39,7 @@ class ListaAgenda : Fragment() {
                         GlobalScope.launch(Dispatchers.IO) {
                             repository.deleteAllContactos()
                         }
+                        setUpRecyclerView()
                         Toast.makeText(
                             requireContext(),
                             "Se ha elimnado todos los contactos",
@@ -76,7 +77,9 @@ class ListaAgenda : Fragment() {
         GlobalScope.launch(Dispatchers.IO) {
             val contactos = async { repository.getAllContacs() }
             val adaptadorContacto = AdaptadorContacto(contactos.await())
-            recyclerContactos.adapter = adaptadorContacto
+            withContext(Dispatchers.Main) {
+                recyclerContactos.adapter = adaptadorContacto
+            }
         }
     }
 
