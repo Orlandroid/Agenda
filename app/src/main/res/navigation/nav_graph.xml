@@ -7,20 +7,32 @@
 
     <fragment
         android:id="@+id/listaAgenda"
-        android:name="com.example.crudagenda.ListaAgenda"
+        android:name="com.example.crudagenda.fragments.ListaAgenda"
         android:label="fragment_lista_agenda"
         tools:layout="@layout/fragment_lista_agenda" >
         <action
             android:id="@+id/action_listaAgenda_to_addContact"
             app:destination="@id/addContact" />
+        <action
+            android:id="@+id/action_listaAgenda_to_update"
+            app:destination="@id/update" />
     </fragment>
     <fragment
         android:id="@+id/addContact"
-        android:name="com.example.crudagenda.AddContact"
+        android:name="com.example.crudagenda.fragments.AddContact"
         android:label="fragment_add_contact"
         tools:layout="@layout/fragment_add_contact" >
         <action
             android:id="@+id/action_addContact_to_listaAgenda"
+            app:destination="@id/listaAgenda" />
+    </fragment>
+    <fragment
+        android:id="@+id/update"
+        android:name="com.example.crudagenda.fragments.Update"
+        android:label="fragment_update"
+        tools:layout="@layout/fragment_update" >
+        <action
+            android:id="@+id/action_update_to_listaAgenda"
             app:destination="@id/listaAgenda" />
     </fragment>
 </navigation>

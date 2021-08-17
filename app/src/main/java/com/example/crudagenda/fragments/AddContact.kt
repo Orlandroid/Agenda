@@ -1,4 +1,4 @@
-package com.example.crudagenda
+package com.example.crudagenda.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.crudagenda.R
 import com.example.crudagenda.data.Contacto
 import com.example.crudagenda.repositorio.ContactoRepository
 import kotlinx.coroutines.*

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.data.Contacto
@@ -35,6 +36,9 @@ class AdaptadorContacto(private val contacto: List<Contacto>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val contacto = contacto[position]
         viewHolder.bind(contacto)
+        viewHolder.itemView.setOnClickListener {
+            viewHolder.itemView.findNavController().navigate(R.id.action_listaAgenda_to_update)
+        }
     }
 
     override fun getItemCount() = contacto.size
