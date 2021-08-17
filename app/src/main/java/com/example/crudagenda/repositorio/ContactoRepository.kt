@@ -24,4 +24,8 @@ class ContactoRepository(context: Context) {
         db.delete(contacto)
     }
 
+    suspend fun deleteAllContactos() {
+        db.deleteAll()
+    }
+
 }

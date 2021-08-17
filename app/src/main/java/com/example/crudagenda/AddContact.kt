@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.data.Contacto
 import com.example.crudagenda.repositorio.ContactoRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class AddContact : Fragment() {
 
@@ -54,6 +52,7 @@ class AddContact : Fragment() {
             repository.addContacto(contact)
             Toast.makeText(requireContext(), "Contacto agregado", Toast.LENGTH_SHORT).show()
         }
+        findNavController().navigate(R.id.action_addContact_to_listaAgenda)
     }
 
 }
