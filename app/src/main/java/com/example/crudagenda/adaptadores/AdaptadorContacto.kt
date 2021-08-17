@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.ListFragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.data.Contacto
+import com.example.crudagenda.fragments.ListaAgenda
+import com.example.crudagenda.fragments.ListaAgendaDirections
 
 class AdaptadorContacto(private val contacto: List<Contacto>) :
     RecyclerView.Adapter<AdaptadorContacto.ViewHolder>() {
@@ -37,7 +40,8 @@ class AdaptadorContacto(private val contacto: List<Contacto>) :
         val contacto = contacto[position]
         viewHolder.bind(contacto)
         viewHolder.itemView.setOnClickListener {
-            viewHolder.itemView.findNavController().navigate(R.id.action_listaAgenda_to_update)
+            val accion = ListaAgendaDirections.actionListaAgendaToUpdate(contacto)
+            viewHolder.itemView.findNavController().navigate(accion)
         }
     }
 

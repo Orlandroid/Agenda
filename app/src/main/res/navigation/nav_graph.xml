@@ -34,5 +34,8 @@
         <action
             android:id="@+id/action_update_to_listaAgenda"
             app:destination="@id/listaAgenda" />
+        <argument
+            android:name="currentContact"
+            app:argType="com.example.crudagenda.data.Contacto" />
     </fragment>
 </navigation>
