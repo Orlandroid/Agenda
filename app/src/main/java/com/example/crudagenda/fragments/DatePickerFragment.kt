@@ -4,10 +4,11 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
-class DatePickerFragment(private val contextP: Context): DialogFragment() {
+class DatePickerFragment(private val contextP: Context) : DialogFragment() {
 
     private var listener: DatePickerDialog.OnDateSetListener? = null
 
@@ -21,7 +22,10 @@ class DatePickerFragment(private val contextP: Context): DialogFragment() {
     }
 
     companion object {
-        fun newInstance(listener: DatePickerDialog.OnDateSetListener,contextP: Context): DatePickerFragment {
+        fun newInstance(
+            listener: DatePickerDialog.OnDateSetListener,
+            contextP: Context
+        ): DatePickerFragment {
             val fragment = DatePickerFragment(contextP)
             fragment.listener = listener
             return fragment
