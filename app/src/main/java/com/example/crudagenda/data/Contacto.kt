@@ -13,5 +13,5 @@ data class Contacto(
     val name: String,
     val phone: String,
     val birthday: String,
-    val nota: String
+    val note: String
 ) : Parcelable

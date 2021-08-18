@@ -4,12 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.ListFragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.data.Contacto
-import com.example.crudagenda.fragments.ListaAgenda
 import com.example.crudagenda.fragments.ListaAgendaDirections
 
 class AdaptadorContacto(private val contacto: List<Contacto>) :
@@ -25,7 +23,7 @@ class AdaptadorContacto(private val contacto: List<Contacto>) :
             name.text = contact.name
             phone.text = contact.phone
             birthday.text = contact.birthday
-            note.text = contact.nota
+            note.text = contact.note
         }
     }
 
