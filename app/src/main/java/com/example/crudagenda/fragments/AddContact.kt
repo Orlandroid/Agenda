@@ -1,5 +1,6 @@
 package com.example.crudagenda.fragments
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -35,6 +36,9 @@ class AddContact : Fragment() {
         buttonGetInto.setOnClickListener {
             getValues()
         }
+        birthday.setOnClickListener {
+            showDatePickerDialog()
+        }
         return view
     }
 
@@ -54,6 +58,15 @@ class AddContact : Fragment() {
             Toast.makeText(requireContext(), "Contacto agregado", Toast.LENGTH_SHORT).show()
         }
         findNavController().navigate(R.id.action_addContact_to_listaAgenda)
+    }
+
+    private fun showDatePickerDialog() {
+        val newFragment =
+            DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener{ _, year, month, day ->
+                val selectedDate = day.toString() + " / " + (month + 1) + " / " + year
+                birthday.setText(selectedDate)
+            }, requireContext())
+        activity?.let { newFragment.show(it.supportFragmentManager, "datePicker") }
     }
 
 }
