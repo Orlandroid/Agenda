@@ -62,7 +62,7 @@ class AddContact : Fragment() {
 
     private fun showDatePickerDialog() {
         val newFragment =
-            DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener{ _, year, month, day ->
+            DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
                 val selectedDate = day.toString() + " / " + (month + 1) + " / " + year
                 birthday.setText(selectedDate)
             }, requireContext())

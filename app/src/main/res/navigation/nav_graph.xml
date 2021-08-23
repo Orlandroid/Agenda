@@ -9,19 +9,27 @@
         android:id="@+id/listaAgenda"
         android:name="com.example.crudagenda.fragments.ListaAgenda"
         android:label="fragment_lista_agenda"
-        tools:layout="@layout/fragment_lista_agenda" >
+        tools:layout="@layout/fragment_lista_agenda">
         <action
             android:id="@+id/action_listaAgenda_to_addContact"
-            app:destination="@id/addContact" />
+            app:destination="@id/addContact"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_out"
+            app:popExitAnim="@anim/slide_up" />
         <action
             android:id="@+id/action_listaAgenda_to_update"
-            app:destination="@id/update" />
+            app:destination="@id/update"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_out"
+            app:popExitAnim="@anim/slide_up" />
     </fragment>
     <fragment
         android:id="@+id/addContact"
         android:name="com.example.crudagenda.fragments.AddContact"
         android:label="fragment_add_contact"
-        tools:layout="@layout/fragment_add_contact" >
+        tools:layout="@layout/fragment_add_contact">
         <action
             android:id="@+id/action_addContact_to_listaAgenda"
             app:destination="@id/listaAgenda" />
@@ -30,7 +38,7 @@
         android:id="@+id/update"
         android:name="com.example.crudagenda.fragments.Update"
         android:label="fragment_update"
-        tools:layout="@layout/fragment_update" >
+        tools:layout="@layout/fragment_update">
         <action
             android:id="@+id/action_update_to_listaAgenda"
             app:destination="@id/listaAgenda" />

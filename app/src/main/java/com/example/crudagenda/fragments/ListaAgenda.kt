@@ -5,24 +5,47 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.adaptadores.AdaptadorContacto
+import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.repositorio.ContactoRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.*
 
 
 class ListaAgenda : Fragment() {
 
-    private lateinit var floatingActionButton: FloatingActionButton
-    private lateinit var recyclerContactos: RecyclerView
+
+    private var _binding: FragmentListaAgendaBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentListaAgendaBinding.inflate(inflater, container, false)
+        val view = binding.root
+        setUpRecyclerView()
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_listaAgenda_to_addContact)
+        }
+        return view
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_lista_agenda, menu)
@@ -59,27 +82,13 @@ class ListaAgenda : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_lista_agenda, container, false)
-        recyclerContactos = view.findViewById(R.id.recycler_view_contactos)
-        floatingActionButton = view.findViewById(R.id.floating_action_button)
-        setUpRecyclerView()
-        floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listaAgenda_to_addContact)
-        }
-        return view
-    }
-
     private fun setUpRecyclerView() {
         val repository = ContactoRepository(requireContext())
         GlobalScope.launch(Dispatchers.IO) {
             val contactos = async { repository.getAllContacs() }
             val adaptadorContacto = AdaptadorContacto(contactos.await())
             withContext(Dispatchers.Main) {
-                recyclerContactos.adapter = adaptadorContacto
+                binding.recyclerViewContactos.adapter = adaptadorContacto
             }
         }
     }
