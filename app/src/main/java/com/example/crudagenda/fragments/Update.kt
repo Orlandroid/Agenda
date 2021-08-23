@@ -5,13 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.crudagenda.R
 import com.example.crudagenda.data.Contacto
+import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.repositorio.ContactoRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
@@ -21,27 +20,23 @@ import kotlinx.coroutines.launch
 class Update : Fragment() {
 
     private val args by navArgs<UpdateArgs>()
-    private lateinit var name: EditText
-    private lateinit var phone: EditText
-    private lateinit var birthday: EditText
-    private lateinit var note: EditText
-    private lateinit var buttonUpdate: Button
+    private var _binding: FragmentUpdateBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_update, container, false)
-        name = view.findViewById(R.id.update_txt_nombre)
-        phone = view.findViewById(R.id.update_txt_phone)
-        birthday = view.findViewById(R.id.update_txt_birthday)
-        note = view.findViewById(R.id.update_txt_note)
-        buttonUpdate = view.findViewById(R.id.update_button)
+        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        val view = binding.root
         setDataArgs()
-        buttonUpdate.setOnClickListener {
+        binding.updateButton.setOnClickListener {
             updateContacto(getContact())
         }
-        birthday.setOnClickListener {
+        binding.updateTxtBirthday.setOnClickListener {
             showDatePickerDialog()
         }
         return view
@@ -92,19 +87,19 @@ class Update : Fragment() {
 
     private fun getContact(): Contacto = Contacto(
         args.currentContact.id,
-        name.text.toString(),
-        phone.text.toString(),
-        birthday.text.toString(),
-        note.text.toString()
+        binding.updateTxtNombre.text.toString(),
+        binding.updateTxtPhone.text.toString(),
+        binding.updateTxtBirthday.text.toString(),
+        binding.updateTxtNote.text.toString()
     )
 
 
     private fun setDataArgs() {
         val contacto = args.currentContact
-        name.setText(contacto.name)
-        phone.setText(contacto.phone)
-        birthday.setText(contacto.birthday)
-        note.setText(contacto.note)
+        binding.updateTxtNombre.setText(contacto.name)
+        binding.updateTxtPhone.setText(contacto.phone)
+        binding.updateTxtBirthday.setText(contacto.birthday)
+        binding.updateTxtNote.setText(contacto.note)
     }
 
     private fun updateContacto(contacto: Contacto) {
@@ -121,7 +116,7 @@ class Update : Fragment() {
         val newFragment =
             DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
                 val selectedDate = day.toString() + " / " + (month + 1) + " / " + year
-                birthday.setText(selectedDate)
+                binding.updateTxtBirthday.setText(selectedDate)
             }, requireContext())
         activity?.let { newFragment.show(it.supportFragmentManager, "datePicker") }
     }

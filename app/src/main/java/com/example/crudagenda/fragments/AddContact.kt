@@ -6,47 +6,43 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.data.Contacto
+import com.example.crudagenda.databinding.FragmentAddContactBinding
 import com.example.crudagenda.repositorio.ContactoRepository
 import kotlinx.coroutines.*
 
 class AddContact : Fragment() {
 
-    private lateinit var name: EditText
-    private lateinit var phone: EditText
-    private lateinit var birthday: EditText
-    private lateinit var note: EditText
-    private lateinit var buttonGetInto: Button
+
+    private var _binding: FragmentAddContactBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_add_contact, container, false)
-        name = view.findViewById(R.id.txt_name)
-        phone = view.findViewById(R.id.txt_telefono)
-        birthday = view.findViewById(R.id.txt_cumple)
-        note = view.findViewById(R.id.txt_nota)
-        buttonGetInto = view.findViewById(R.id.button_insertar)
-        buttonGetInto.setOnClickListener {
+        _binding = FragmentAddContactBinding.inflate(layoutInflater, container, false)
+        val view = binding.root
+        binding.buttonInsertar.setOnClickListener {
             getValues()
         }
-        birthday.setOnClickListener {
+        binding.txtCumple.setOnClickListener {
             showDatePickerDialog()
         }
         return view
     }
 
     private fun getValues() {
-        val name = name.text.toString()
-        val phone = phone.text.toString()
-        val birthday = birthday.text.toString()
-        val note = note.text.toString()
+        val name = binding.txtName.text.toString()
+        val phone = binding.txtTelefono.text.toString()
+        val birthday = binding.txtCumple.text.toString()
+        val note = binding.txtNota.text.toString()
         insertContact(name, phone, birthday, note)
     }
 
@@ -64,7 +60,7 @@ class AddContact : Fragment() {
         val newFragment =
             DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
                 val selectedDate = day.toString() + " / " + (month + 1) + " / " + year
-                birthday.setText(selectedDate)
+                binding.txtCumple.setText(selectedDate)
             }, requireContext())
         activity?.let { newFragment.show(it.supportFragmentManager, "datePicker") }
     }
