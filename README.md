@@ -9,6 +9,7 @@ los contactos
 - Rom database
 - Corutines
 - ViewBinding
+- MVVM
 - Demo https://www.youtube.com/watch?v=Gf-AuousTBk
 
 #Capturas
