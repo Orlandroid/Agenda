@@ -12,12 +12,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.databinding.FragmentUpdateBinding
-import com.example.crudagenda.repositorio.ContactoRepository
 import com.example.crudagenda.viewmodel.ViewModelUpdate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class Update : Fragment() {
 

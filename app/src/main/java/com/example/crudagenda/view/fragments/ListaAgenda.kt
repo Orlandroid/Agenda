@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.view.adapters.AdaptadorContacto
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.repositorio.ContactoRepository
+import com.example.crudagenda.viewmodel.ViewModelListaAgenda
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.*
 
@@ -21,6 +23,7 @@ class ListaAgenda : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val viewModel: ViewModelListaAgenda by viewModels()
 
 
     override fun onCreateView(
@@ -59,10 +62,7 @@ class ListaAgenda : Fragment() {
                 alert.setTitle("Confirmacion")
                     .setMessage("¿ Estas seguro que deseas eliminar todos los registros ?")
                     .setPositiveButton("Eliminar") { dialog, _ ->
-                        val repository = ContactoRepository(requireContext())
-                        GlobalScope.launch(Dispatchers.IO) {
-                            repository.deleteAllContactos()
-                        }
+                        viewModel.deleteAllContacts()
                         setUpRecyclerView()
                         Toast.makeText(
                             requireContext(),
@@ -83,14 +83,10 @@ class ListaAgenda : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        val repository = ContactoRepository(requireContext())
-        GlobalScope.launch(Dispatchers.IO) {
-            val contactos = async { repository.getAllContacs() }
-            val adaptadorContacto = AdaptadorContacto(contactos.await())
-            withContext(Dispatchers.Main) {
-                binding.recyclerViewContactos.adapter = adaptadorContacto
-            }
-        }
+        viewModel.getAllContacts()
+        viewModel.contactos.observe(viewLifecycleOwner, {
+            binding.recyclerViewContactos.adapter= AdaptadorContacto(it)
+        })
     }
 
 }
