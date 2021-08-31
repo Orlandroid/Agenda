@@ -1,4 +1,4 @@
-package com.example.crudagenda.fragments
+package com.example.crudagenda.view.fragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.crudagenda.R
-import com.example.crudagenda.data.Contacto
+import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.repositorio.ContactoRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

@@ -1,4 +1,4 @@
-package com.example.crudagenda.data
+package com.example.crudagenda.modelo
 
 import android.content.Context
 import androidx.room.Database

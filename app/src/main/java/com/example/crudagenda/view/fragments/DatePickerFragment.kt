@@ -1,10 +1,9 @@
-package com.example.crudagenda.fragments
+package com.example.crudagenda.view.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import java.util.*
 

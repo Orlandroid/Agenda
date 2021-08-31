@@ -1,4 +1,4 @@
-package com.example.crudagenda
+package com.example.crudagenda.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

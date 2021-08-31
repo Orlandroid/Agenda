@@ -1,10 +1,11 @@
 package com.example.crudagenda.repositorio
 
 import android.content.Context
-import com.example.crudagenda.data.Contacto
-import com.example.crudagenda.data.ContactoDatabase
+import com.example.crudagenda.modelo.Contacto
+import com.example.crudagenda.modelo.ContactoDatabase
 
 class ContactoRepository(context: Context) {
+
     private val db = ContactoDatabase.getDatabase(context).contactoDao()
 
 

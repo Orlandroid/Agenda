@@ -1,4 +1,4 @@
-package com.example.crudagenda.fragments
+package com.example.crudagenda.view.fragments
 
 import android.os.Bundle
 import android.view.*
@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
-import com.example.crudagenda.adaptadores.AdaptadorContacto
+import com.example.crudagenda.view.adapters.AdaptadorContacto
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.repositorio.ContactoRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
