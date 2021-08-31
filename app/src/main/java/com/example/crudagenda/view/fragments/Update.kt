@@ -6,12 +6,14 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.repositorio.ContactoRepository
+import com.example.crudagenda.viewmodel.ViewModelUpdate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,6 +27,7 @@ class Update : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val viewModel: ViewModelUpdate by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,10 +64,7 @@ class Update : Fragment() {
                 alert.setTitle("Confirmacion")
                     .setMessage("¿ Estas seguro que deseas eliminar el contacto ?")
                     .setPositiveButton("Eliminar") { dialog, _ ->
-                        val repository = ContactoRepository(requireContext())
-                        GlobalScope.launch(Dispatchers.IO) {
-                            repository.deleteContacto(args.currentContact)
-                        }
+                        viewModel.deleteContacto(args.currentContact)
                         Toast.makeText(
                             requireContext(),
                             "Se ha elimnado el contacto",
@@ -103,10 +103,7 @@ class Update : Fragment() {
     }
 
     private fun updateContacto(contacto: Contacto) {
-        val repository = ContactoRepository(requireContext())
-        GlobalScope.launch(Dispatchers.IO) {
-            repository.updateContact(contacto)
-        }
+        viewModel.updateContacto(contacto)
         Toast.makeText(requireContext(), "Actualizado", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_update_to_listaAgenda)
     }
