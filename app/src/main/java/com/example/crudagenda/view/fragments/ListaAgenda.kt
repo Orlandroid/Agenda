@@ -12,6 +12,7 @@ import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.repositorio.ContactoRepository
 import com.example.crudagenda.viewmodel.ViewModelListaAgenda
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 
