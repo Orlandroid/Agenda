@@ -1,26 +1,28 @@
 package com.example.crudagenda.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.repositorio.ContactoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelUpdate(application: Application) : AndroidViewModel(application) {
-
-    private val repository = ContactoRepository(application)
+@HiltViewModel
+class ViewModelUpdate @Inject constructor(private val contactoRepository: ContactoRepository) :
+    ViewModel() {
 
     fun deleteContacto(contacto: Contacto) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteContacto(contacto)
+            contactoRepository.deleteContacto(contacto)
         }
     }
 
     fun updateContacto(contacto: Contacto) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateContact(contacto)
+            contactoRepository.updateContact(contacto)
         }
     }
 

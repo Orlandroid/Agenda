@@ -3,27 +3,31 @@ package com.example.crudagenda.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.repositorio.ContactoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelListaAgenda(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class ViewModelListaAgenda @Inject constructor(private val contactoRepository: ContactoRepository) :
+    ViewModel() {
 
-    private val repository = ContactoRepository(application)
 
     val contactos = MutableLiveData<List<Contacto>>()
 
     fun deleteAllContacts() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteAllContactos()
+            contactoRepository.deleteAllContactos()
         }
     }
 
     fun getAllContacts() {
         viewModelScope.launch(Dispatchers.IO) {
-            val currentContactos = repository.getAllContacs()
+            val currentContactos = contactoRepository.getAllContacs()
             contactos.postValue(currentContactos)
         }
     }

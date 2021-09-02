@@ -3,20 +3,23 @@ package com.example.crudagenda.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.repositorio.ContactoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelAddContact(aplication: Application) : AndroidViewModel(aplication) {
-
-    private val repository = ContactoRepository(aplication)
+@HiltViewModel
+class ViewModelAddContact @Inject constructor(private val contactoRepository: ContactoRepository) :
+    ViewModel() {
 
     fun insertContact(name: String, phone: String, birthday: String, note: String) {
         val contact = Contacto(0, name, phone, birthday, note)
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addContacto(contact)
+            contactoRepository.addContacto(contact)
         }
     }
 

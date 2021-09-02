@@ -1,12 +1,12 @@
 package com.example.crudagenda.repositorio
 
-import android.content.Context
+
 import com.example.crudagenda.modelo.Contacto
-import com.example.crudagenda.modelo.ContactoDatabase
+import com.example.crudagenda.modelo.ContactoDao
+import javax.inject.Inject
 
-class ContactoRepository(context: Context) {
 
-    private val db = ContactoDatabase.getDatabase(context).contactoDao()
+class ContactoRepository @Inject constructor(private val db: ContactoDao) {
 
 
     suspend fun addContacto(contacto: Contacto) {
