@@ -10,6 +10,7 @@ los contactos
 - Corutines
 - ViewBinding
 - MVVM
+- Dagger-Hilt
 - Demo https://www.youtube.com/watch?v=Gf-AuousTBk
 
 #Capturas
