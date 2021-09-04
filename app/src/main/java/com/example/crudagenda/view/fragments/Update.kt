@@ -14,7 +14,9 @@ import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.viewmodel.ViewModelUpdate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class Update : Fragment() {
 
     private val args by navArgs<UpdateArgs>()

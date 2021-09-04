@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 
+@AndroidEntryPoint
 class ListaAgenda : Fragment() {
 
 
@@ -86,7 +87,7 @@ class ListaAgenda : Fragment() {
     private fun setUpRecyclerView() {
         viewModel.getAllContacts()
         viewModel.contactos.observe(viewLifecycleOwner, {
-            binding.recyclerViewContactos.adapter= AdaptadorContacto(it)
+            binding.recyclerViewContactos.adapter = AdaptadorContacto(it)
         })
     }
 

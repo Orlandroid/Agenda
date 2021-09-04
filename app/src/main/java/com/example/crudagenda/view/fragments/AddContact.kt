@@ -11,8 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
 import com.example.crudagenda.viewmodel.ViewModelAddContact
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AddContact : Fragment() {
 
 
