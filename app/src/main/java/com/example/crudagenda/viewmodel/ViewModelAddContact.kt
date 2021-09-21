@@ -17,9 +17,8 @@ class ViewModelAddContact @Inject constructor(private val contactoRepository: Co
     fun insertContact(name: String, phone: String, birthday: String, note: String) {
         val contact = Contacto(0, name, phone, birthday, note)
         viewModelScope.launch(Dispatchers.IO) {
-            contactoRepository.addContacto(contact)
+                contactoRepository.addContacto(contact)
         }
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.example.crudagenda.view.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -10,6 +11,8 @@ import com.example.crudagenda.R
 import com.example.crudagenda.view.adapters.AdaptadorContacto
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.repositorio.ContactoRepository
+import com.example.crudagenda.util.AlertMessageDialog
+import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.viewmodel.ViewModelListaAgenda
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +20,7 @@ import kotlinx.coroutines.*
 
 
 @AndroidEntryPoint
-class ListaAgenda : Fragment() {
+class ListaAgenda : Fragment(), ListenerAlertDialog {
 
 
     private var _binding: FragmentListaAgendaBinding? = null
@@ -26,7 +29,9 @@ class ListaAgenda : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private val viewModel: ViewModelListaAgenda by viewModels()
+    private val TAG = "LISTA_AGENDA"
 
+    fun getListener(): ListenerAlertDialog = this
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,24 +65,8 @@ class ListaAgenda : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.submenu_eliminar -> {
-                val alert = MaterialAlertDialogBuilder(requireContext())
-                alert.setTitle("Confirmacion")
-                    .setMessage("¿ Estas seguro que deseas eliminar todos los registros ?")
-                    .setPositiveButton("Eliminar") { dialog, _ ->
-                        viewModel.deleteAllContacts()
-                        setUpRecyclerView()
-                        Toast.makeText(
-                            requireContext(),
-                            "Se ha elimnado todos los contactos",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                alert.create()
-                alert.show()
+                val alert = AlertMessageDialog(requireContext(), getListener())
+                alert.showAlertDialog()
                 return true
             }
         }
@@ -89,6 +78,16 @@ class ListaAgenda : Fragment() {
         viewModel.contactos.observe(viewLifecycleOwner, {
             binding.recyclerViewContactos.adapter = AdaptadorContacto(it)
         })
+    }
+
+    override fun btnCancel() {
+        Log.w(TAG, "CANCEL")
+    }
+
+    override fun btnEliminar() {
+        Log.w(TAG, "Eliminado")
+        viewModel.deleteAllContacts()
+        setUpRecyclerView()
     }
 
 }
