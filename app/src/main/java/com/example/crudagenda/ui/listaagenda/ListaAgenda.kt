@@ -1,22 +1,17 @@
-package com.example.crudagenda.view.fragments
+package com.example.crudagenda.ui.listaagenda
 
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
-import com.example.crudagenda.view.adapters.AdaptadorContacto
+import com.example.crudagenda.ui.addcontact.ContactoAdapter
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
-import com.example.crudagenda.repositorio.ContactoRepository
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
-import com.example.crudagenda.viewmodel.ViewModelListaAgenda
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
 
 
 @AndroidEntryPoint
@@ -31,7 +26,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     private val viewModel: ViewModelListaAgenda by viewModels()
     private val TAG = "LISTA_AGENDA"
 
-    fun getListener(): ListenerAlertDialog = this
+    private fun getListener(): ListenerAlertDialog = this
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +71,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     private fun setUpRecyclerView() {
         viewModel.getAllContacts()
         viewModel.contactos.observe(viewLifecycleOwner, {
-            binding.recyclerViewContactos.adapter = AdaptadorContacto(it)
+            binding.recyclerViewContactos.adapter = ContactoAdapter(it)
         })
     }
 

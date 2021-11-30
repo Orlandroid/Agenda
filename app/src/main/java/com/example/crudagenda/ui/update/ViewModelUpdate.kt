@@ -1,4 +1,4 @@
-package com.example.crudagenda.viewmodel
+package com.example.crudagenda.ui.update
 
 
 import androidx.lifecycle.ViewModel

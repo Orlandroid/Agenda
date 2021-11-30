@@ -1,4 +1,4 @@
-package com.example.crudagenda.view.fragments
+package com.example.crudagenda.util
 
 import android.app.DatePickerDialog
 import android.app.Dialog

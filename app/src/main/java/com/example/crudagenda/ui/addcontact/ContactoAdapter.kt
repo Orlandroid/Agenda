@@ -1,4 +1,4 @@
-package com.example.crudagenda.view.adapters
+package com.example.crudagenda.ui.addcontact
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +8,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
-import com.example.crudagenda.view.fragments.ListaAgendaDirections
+import com.example.crudagenda.ui.listaagenda.ListaAgendaDirections
 
-class AdaptadorContacto(private val contacto: List<Contacto>) :
-    RecyclerView.Adapter<AdaptadorContacto.ViewHolder>() {
+class ContactoAdapter(private val contacto: List<Contacto>) :
+    RecyclerView.Adapter<ContactoAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.item_nombre)

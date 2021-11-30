@@ -1,4 +1,4 @@
-package com.example.crudagenda.view.fragments
+package com.example.crudagenda.ui.addcontact
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
-import com.example.crudagenda.viewmodel.ViewModelAddContact
+import com.example.crudagenda.util.DatePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
