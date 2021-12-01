@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/item_nombre"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/item_telefono"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView"
@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/item_cumple"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView"
@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/item_nota"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView"

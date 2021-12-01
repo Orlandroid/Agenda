@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
 import com.example.crudagenda.util.DatePickerFragment
+import com.example.crudagenda.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,8 +21,6 @@ class AddContact : Fragment() {
 
     private var _binding: FragmentAddContactBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private val viewModel: ViewModelAddContact by viewModels()
 
@@ -29,14 +29,20 @@ class AddContact : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddContactBinding.inflate(layoutInflater, container, false)
-        val view = binding.root
+        setUpUi()
+        return binding.root
+    }
+
+    private fun setUpUi() {
+        binding.rootView.setOnClickListener {
+            hideKeyboard()
+        }
         binding.buttonInsertar.setOnClickListener {
             getValues()
         }
         binding.txtCumple.setOnClickListener {
             showDatePickerDialog()
         }
-        return view
     }
 
     private fun getValues() {
@@ -56,6 +62,11 @@ class AddContact : Fragment() {
                 binding.txtCumple.setText(selectedDate)
             }, requireContext())
         activity?.let { newFragment.show(it.supportFragmentManager, "datePicker") }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

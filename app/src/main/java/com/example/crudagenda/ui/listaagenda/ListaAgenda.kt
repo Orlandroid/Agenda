@@ -11,6 +11,8 @@ import com.example.crudagenda.ui.addcontact.ContactoAdapter
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
+import com.example.crudagenda.util.ResultData
+import com.example.crudagenda.util.showSnack
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -25,6 +27,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     private val binding get() = _binding!!
     private val viewModel: ViewModelListaAgenda by viewModels()
     private val TAG = "LISTA_AGENDA"
+    private val adapter = ContactoAdapter()
 
     private fun getListener(): ListenerAlertDialog = this
 
@@ -33,12 +36,15 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentListaAgendaBinding.inflate(inflater, container, false)
-        val view = binding.root
-        setUpRecyclerView()
+        setUpUi()
+        return binding.root
+    }
+
+    private fun setUpUi(){
+        setUpObserver()
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listaAgenda_to_addContact)
         }
-        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,11 +74,37 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setUpRecyclerView() {
-        viewModel.getAllContacts()
+
+    private fun setUpObserver(){
         viewModel.contactos.observe(viewLifecycleOwner, {
-            binding.recyclerViewContactos.adapter = ContactoAdapter(it)
+            when(it){
+                is ResultData.Error ->{
+                    binding.root.showSnack(it.message!!)
+                    visibilityProgres(false)
+                }
+                is ResultData.Succes ->{
+                    visibilityProgres(false)
+                    if (it.data != null){
+                        binding.recyclerViewContactos.adapter=adapter
+                        adapter.setData(it.data)
+                    }
+                }
+                is ResultData.ErrorNetwork ->{
+                    binding.root.showSnack(it.message!!)
+                    visibilityProgres(false)
+                }
+                is ResultData.Loading ->{
+                    visibilityProgres(true)
+                }
+            }
         })
+    }
+
+    private fun visibilityProgres(visible:Boolean){
+        if (visible)
+            binding.progressBar.visibility=View.VISIBLE
+        else
+            binding.progressBar.visibility=View.INVISIBLE
     }
 
     override fun btnCancel() {
@@ -82,7 +114,6 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     override fun btnEliminar() {
         Log.w(TAG, "Eliminado")
         viewModel.deleteAllContacts()
-        setUpRecyclerView()
     }
 
 }

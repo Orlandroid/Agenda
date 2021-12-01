@@ -10,8 +10,15 @@ import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.ui.listaagenda.ListaAgendaDirections
 
-class ContactoAdapter(private val contacto: List<Contacto>) :
+class ContactoAdapter() :
     RecyclerView.Adapter<ContactoAdapter.ViewHolder>() {
+
+    private var listaContactos = listOf<Contacto>()
+
+    fun setData(contatos:List<Contacto>){
+        listaContactos=contatos
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.item_nombre)
@@ -35,7 +42,7 @@ class ContactoAdapter(private val contacto: List<Contacto>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val contacto = contacto[position]
+        val contacto = listaContactos[position]
         viewHolder.bind(contacto)
         viewHolder.itemView.setOnClickListener {
             val accion = ListaAgendaDirections.actionListaAgendaToUpdate(contacto)
@@ -43,6 +50,6 @@ class ContactoAdapter(private val contacto: List<Contacto>) :
         }
     }
 
-    override fun getItemCount() = contacto.size
+    override fun getItemCount() = listaContactos.size
 
 }
