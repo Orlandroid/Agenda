@@ -13,17 +13,11 @@
         <action
             android:id="@+id/action_listaAgenda_to_addContact"
             app:destination="@id/addContact"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/slide_out"
-            app:popEnterAnim="@anim/slide_out"
-            app:popExitAnim="@anim/slide_up" />
+            />
         <action
             android:id="@+id/action_listaAgenda_to_update"
             app:destination="@id/update"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/slide_out"
-            app:popEnterAnim="@anim/slide_out"
-            app:popExitAnim="@anim/slide_up" />
+            />
     </fragment>
     <fragment
         android:id="@+id/addContact"
