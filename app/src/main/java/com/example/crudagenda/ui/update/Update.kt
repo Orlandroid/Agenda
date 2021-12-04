@@ -88,7 +88,8 @@ class Update : Fragment() {
         binding.updateTxtNombre.text.toString(),
         binding.updateTxtPhone.text.toString(),
         binding.updateTxtBirthday.text.toString(),
-        binding.updateTxtNote.text.toString()
+        binding.updateTxtNote.text.toString(),
+        ""
     )
 
 

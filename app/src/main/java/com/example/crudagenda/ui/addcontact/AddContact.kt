@@ -5,7 +5,7 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -84,6 +84,7 @@ class AddContact : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 imageUri = data?.data
+                Log.w("ANDROID",imageUri.toString())
                 binding.imagen.setImageURI(imageUri)
             }
         }
@@ -94,7 +95,8 @@ class AddContact : Fragment() {
         val phone = binding.txtTelefono.editText?.text.toString()
         val birthday = binding.txtCumple.editText?.text.toString()
         val note = binding.txtNota.editText?.text.toString()
-        viewModel.insertContact(name, phone, birthday, note)
+        Log.w("ANDROID 2",imageUri.toString())
+        viewModel.insertContact(name, phone, birthday, note,imageUri.toString())
         findNavController().navigate(R.id.action_addContact_to_listaAgenda)
     }
 

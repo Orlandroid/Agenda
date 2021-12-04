@@ -1,14 +1,15 @@
-package com.example.crudagenda.ui.addcontact
+package com.example.crudagenda.ui.listaagenda
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
-import com.example.crudagenda.ui.listaagenda.ListaAgendaDirections
 
 class ContactoAdapter() :
     RecyclerView.Adapter<ContactoAdapter.ViewHolder>() {
@@ -25,19 +26,20 @@ class ContactoAdapter() :
         val phone: TextView = view.findViewById(R.id.item_telefono)
         val birthday: TextView = view.findViewById(R.id.item_cumple)
         val note: TextView = view.findViewById(R.id.item_nota)
+        val image:ImageView = view.findViewById(R.id.imageContacto)
 
         fun bind(contact: Contacto) {
             name.text = contact.name
             phone.text = contact.phone
             birthday.text = contact.birthday
             note.text = contact.note
+            image.setImageURI(Uri.parse(contact.image))
         }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_contacto, viewGroup, false)
-
         return ViewHolder(view)
     }
 

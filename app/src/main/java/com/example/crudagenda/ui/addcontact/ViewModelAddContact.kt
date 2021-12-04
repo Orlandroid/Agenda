@@ -14,10 +14,10 @@ import javax.inject.Inject
 class ViewModelAddContact @Inject constructor(private val contactoRepository: ContactoRepository) :
     ViewModel() {
 
-    fun insertContact(name: String, phone: String, birthday: String, note: String) {
-        val contact = Contacto(0, name, phone, birthday, note)
+    fun insertContact(name: String, phone: String, birthday: String, note: String, image: String) {
+        val contact = Contacto(0, name, phone, birthday, note, image)
         viewModelScope.launch(Dispatchers.IO) {
-                contactoRepository.addContacto(contact)
+            contactoRepository.addContacto(contact)
         }
     }
 

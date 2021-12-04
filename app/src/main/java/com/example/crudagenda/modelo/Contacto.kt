@@ -13,5 +13,6 @@ data class Contacto(
     val name: String,
     val phone: String,
     val birthday: String,
-    val note: String
+    val note: String,
+    val image: String
 ) : Parcelable

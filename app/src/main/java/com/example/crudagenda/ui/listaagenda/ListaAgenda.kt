@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
-import com.example.crudagenda.ui.addcontact.ContactoAdapter
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
