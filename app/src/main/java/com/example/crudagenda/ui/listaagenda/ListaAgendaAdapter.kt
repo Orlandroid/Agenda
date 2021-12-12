@@ -1,5 +1,6 @@
 package com.example.crudagenda.ui.listaagenda
 
+import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +9,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
 
-class ContactoAdapter() :
-    RecyclerView.Adapter<ContactoAdapter.ViewHolder>() {
+class ListaAgendaAdapter() :
+    RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
 
     private var listaContactos = listOf<Contacto>()
 
-    fun setData(contatos:List<Contacto>){
-        listaContactos=contatos
+    fun setData(contatos: List<Contacto>) {
+        listaContactos = contatos
         notifyDataSetChanged()
     }
 
@@ -26,14 +28,16 @@ class ContactoAdapter() :
         val phone: TextView = view.findViewById(R.id.item_telefono)
         val birthday: TextView = view.findViewById(R.id.item_cumple)
         val note: TextView = view.findViewById(R.id.item_nota)
-        val image:ImageView = view.findViewById(R.id.imageContacto)
+        val image: ImageView = view.findViewById(R.id.imageContacto)
 
         fun bind(contact: Contacto) {
             name.text = contact.name
             phone.text = contact.phone
             birthday.text = contact.birthday
             note.text = contact.note
-            image.setImageURI(Uri.parse(contact.image))
+            Glide.with(itemView.context)
+                .load(contact.image)
+                .into(image)
         }
     }
 

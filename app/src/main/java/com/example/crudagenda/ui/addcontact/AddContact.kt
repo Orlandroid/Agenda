@@ -16,10 +16,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
-import com.example.crudagenda.util.DatePickerFragment
-import com.example.crudagenda.util.hideKeyboard
-import com.example.crudagenda.util.openGaleryToChoseImage
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.crudagenda.util.*
+
 
 @AndroidEntryPoint
 class AddContact : Fragment() {
@@ -30,6 +29,7 @@ class AddContact : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ViewModelAddContact by viewModels()
     private var imageUri: Uri? = null
+    private lateinit var imageBase64: String
 
 
     override fun onCreateView(
@@ -57,16 +57,16 @@ class AddContact : Fragment() {
         }
     }
 
-    private fun doOnTextChange(){
-        with(binding){
+    private fun doOnTextChange() {
+        with(binding) {
             txtName.editText?.doOnTextChanged { _, _, _, _ ->
-                binding.buttonInsertar.isEnabled=!areEmptyFields()
+                binding.buttonInsertar.isEnabled = !areEmptyFields()
             }
             txtTelefono.editText?.doOnTextChanged { _, _, _, _ ->
-                binding.buttonInsertar.isEnabled=!areEmptyFields()
+                binding.buttonInsertar.isEnabled = !areEmptyFields()
             }
             txtNota.editText?.doOnTextChanged { _, _, _, _ ->
-                binding.buttonInsertar.isEnabled=!areEmptyFields()
+                binding.buttonInsertar.isEnabled = !areEmptyFields()
             }
         }
     }
@@ -84,19 +84,25 @@ class AddContact : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 imageUri = data?.data
-                Log.w("ANDROID",imageUri.toString())
                 binding.imagen.setImageURI(imageUri)
+                imageUri?.let { saveImageBase64(it) }
             }
         }
 
+    private fun saveImageBase64(imageUri: Uri) {
+        val imageBitmap = getImageBitmapFromUri(requireContext(), imageUri)
+        imageBase64 = getImageBase64FromBitMap(imageBitmap)
+    }
 
     private fun getValues() {
+        if (imageBase64.isEmpty()) {
+            return
+        }
         val name = binding.txtName.editText?.text.toString()
         val phone = binding.txtTelefono.editText?.text.toString()
         val birthday = binding.txtCumple.editText?.text.toString()
         val note = binding.txtNota.editText?.text.toString()
-        Log.w("ANDROID 2",imageUri.toString())
-        viewModel.insertContact(name, phone, birthday, note,imageUri.toString())
+        viewModel.insertContact(name, phone, birthday, note, imageUri.toString())
         findNavController().navigate(R.id.action_addContact_to_listaAgenda)
     }
 

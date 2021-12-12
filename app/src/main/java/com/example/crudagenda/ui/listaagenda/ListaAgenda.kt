@@ -26,7 +26,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     private val binding get() = _binding!!
     private val viewModel: ViewModelListaAgenda by viewModels()
     private val TAG = "LISTA_AGENDA"
-    private val adapter = ContactoAdapter()
+    private val adapter = ListaAgendaAdapter()
 
     private fun getListener(): ListenerAlertDialog = this
 
