@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
+import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.util.ResultData
@@ -39,7 +40,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
         return binding.root
     }
 
-    private fun setUpUi(){
+    private fun setUpUi() {
         setUpObserver()
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listaAgenda_to_addContact)
@@ -74,36 +75,37 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     }
 
 
-    private fun setUpObserver(){
+    private fun setUpObserver() {
         viewModel.contactos.observe(viewLifecycleOwner, {
-            when(it){
-                is ResultData.Error ->{
+            when (it) {
+                is ResultData.Error -> {
                     binding.root.showSnack(it.message!!)
                     visibilityProgres(false)
                 }
-                is ResultData.Succes ->{
+                is ResultData.Succes -> {
                     visibilityProgres(false)
-                    if (it.data != null){
-                        binding.recyclerViewContactos.adapter=adapter
-                        adapter.setData(it.data)
+                    if (it.data != null) {
+                        binding.recyclerViewContactos.adapter = adapter
+                        adapter.setData(it.data as MutableList<Contacto>)
                     }
                 }
-                is ResultData.ErrorNetwork ->{
+                is ResultData.ErrorNetwork -> {
                     binding.root.showSnack(it.message!!)
                     visibilityProgres(false)
                 }
-                is ResultData.Loading ->{
+                is ResultData.Loading -> {
                     visibilityProgres(true)
                 }
             }
         })
     }
 
-    private fun visibilityProgres(visible:Boolean){
-        if (visible)
-            binding.progressBar.visibility=View.VISIBLE
-        else
-            binding.progressBar.visibility=View.INVISIBLE
+    private fun visibilityProgres(visible: Boolean) {
+        if (visible) {
+            binding.progressBar.visibility = View.VISIBLE
+            return
+        }
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
     override fun btnCancel() {

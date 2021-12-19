@@ -2,6 +2,7 @@ package com.example.crudagenda.ui.listaagenda
 
 
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,7 +27,7 @@ private val networkHelper: NetworkHelper) :
     }
 
     private val _contactos = MutableLiveData<ResultData<List<Contacto>>>()
-    val contactos: MutableLiveData<ResultData<List<Contacto>>>
+    val contactos: LiveData<ResultData<List<Contacto>>>
         get() = _contactos
 
     fun deleteAllContacts() {
@@ -47,7 +48,7 @@ private val networkHelper: NetworkHelper) :
                 _contactos.postValue(ResultData.Succes(responseContactos))
                 return@launch
             }
-            _contactos.postValue(ResultData.Error("Error al traer datos"))
+            _contactos.postValue(ResultData.Error("Aun no hay ningun contacto en la base de datos"))
         }
     }
 

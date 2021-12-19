@@ -1,7 +1,5 @@
 package com.example.crudagenda.ui.listaagenda
 
-import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +14,9 @@ import com.example.crudagenda.modelo.Contacto
 class ListaAgendaAdapter() :
     RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
 
-    private var listaContactos = listOf<Contacto>()
+    private var listaContactos = mutableListOf<Contacto>()
 
-    fun setData(contatos: List<Contacto>) {
+    fun setData(contatos: MutableList<Contacto>) {
         listaContactos = contatos
         notifyDataSetChanged()
     }

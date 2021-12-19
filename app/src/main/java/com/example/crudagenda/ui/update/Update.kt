@@ -69,7 +69,7 @@ class Update : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         Log.i("DELETE", "Eliminado")
-                        findNavController().navigate(R.id.action_update_to_listaAgenda)
+                        findNavController().popBackStack()
                         dialog.dismiss()
                     }
                     .setNegativeButton("Cancel") { dialog, _ ->
@@ -104,7 +104,7 @@ class Update : Fragment() {
     private fun updateContacto(contacto: Contacto) {
         viewModel.updateContacto(contacto)
         Toast.makeText(requireContext(), "Actualizado", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_update_to_listaAgenda)
+        findNavController().popBackStack()
     }
 
 

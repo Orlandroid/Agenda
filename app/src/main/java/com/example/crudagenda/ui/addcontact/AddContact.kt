@@ -10,9 +10,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
@@ -29,7 +31,7 @@ class AddContact : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ViewModelAddContact by viewModels()
     private var imageUri: Uri? = null
-    private lateinit var imageBase64: String
+    private var imageBase64: String = ""
 
 
     override fun onCreateView(
@@ -38,6 +40,7 @@ class AddContact : Fragment() {
     ): View? {
         _binding = FragmentAddContactBinding.inflate(layoutInflater, container, false)
         setUpUi()
+        setUpObserver()
         return binding.root
     }
 
@@ -56,6 +59,20 @@ class AddContact : Fragment() {
             showDatePickerDialog()
         }
     }
+
+    private fun setUpObserver() {
+        viewModel.progresBar.observe(viewLifecycleOwner, {
+            when (it) {
+                true -> {
+                    binding.progressBar3.visibility = View.VISIBLE
+                }
+                false -> {
+                    binding.progressBar3.visibility = View.INVISIBLE
+                }
+            }
+        })
+    }
+
 
     private fun doOnTextChange() {
         with(binding) {
@@ -95,7 +112,9 @@ class AddContact : Fragment() {
     }
 
     private fun getValues() {
-        if (imageBase64.isEmpty()) {
+        if (imageBase64.isEmpty() or (imageBase64 == "")) {
+            Toast.makeText(requireContext(), "Debes de ingresar una imagen", Toast.LENGTH_SHORT)
+                .show()
             return
         }
         val name = binding.txtName.editText?.text.toString()
@@ -103,7 +122,7 @@ class AddContact : Fragment() {
         val birthday = binding.txtCumple.editText?.text.toString()
         val note = binding.txtNota.editText?.text.toString()
         viewModel.insertContact(name, phone, birthday, note, imageUri.toString())
-        findNavController().navigate(R.id.action_addContact_to_listaAgenda)
+        findNavController().popBackStack()
     }
 
 
