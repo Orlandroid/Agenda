@@ -1,5 +1,6 @@
 package com.example.crudagenda.ui.listaagenda
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,9 +34,7 @@ class ListaAgendaAdapter() :
             phone.text = contact.phone
             birthday.text = contact.birthday
             note.text = contact.note
-            Glide.with(itemView.context)
-                .load(contact.image)
-                .into(image)
+            Glide.with(itemView.context).load(contact.image).into(image)
         }
     }
 

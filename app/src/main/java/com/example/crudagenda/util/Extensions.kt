@@ -29,6 +29,6 @@ fun Context.hideKeyboard(view: View) {
 }
 
 fun Fragment.openGaleryToChoseImage(resultLauncher: ActivityResultLauncher<Intent>) {
-    val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+    val gallery = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
     resultLauncher.launch(gallery)
 }

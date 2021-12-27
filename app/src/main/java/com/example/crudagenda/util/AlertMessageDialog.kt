@@ -6,10 +6,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class AlertMessageDialog(private val context: Context, private val listener: ListenerAlertDialog) {
 
-    fun showAlertDialog() {
+    fun showAlertDialog(message: String) {
         val alert = MaterialAlertDialogBuilder(context)
         alert.setTitle("Confirmacion")
-            .setMessage("¿ Estas seguro que deseas eliminar el contacto ?")
+            .setMessage(message)
             .setPositiveButton("Eliminar") { dialog, _ ->
                 listener.btnEliminar()
                 dialog.dismiss()

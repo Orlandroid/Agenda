@@ -1,7 +1,6 @@
 package com.example.crudagenda.ui.listaagenda
 
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelListaAgenda @Inject constructor(
     private val contactoRepository: ContactoRepository,
-private val networkHelper: NetworkHelper) :
+    private val networkHelper: NetworkHelper
+) :
     ViewModel() {
 
 
@@ -30,6 +30,8 @@ private val networkHelper: NetworkHelper) :
     val contactos: LiveData<ResultData<List<Contacto>>>
         get() = _contactos
 
+    suspend fun getContactos(): List<Contacto> = contactoRepository.getAllContacs()
+
     fun deleteAllContacts() {
         viewModelScope.launch(Dispatchers.IO) {
             contactoRepository.deleteAllContactos()
@@ -37,14 +39,14 @@ private val networkHelper: NetworkHelper) :
     }
 
     private fun getAllContacts() {
-        if (!networkHelper.isNetworkConnected()){
+        if (!networkHelper.isNetworkConnected()) {
             _contactos.postValue(ResultData.ErrorNetwork("Error de conexion"))
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
             _contactos.postValue(ResultData.Loading())
             val responseContactos = contactoRepository.getAllContacs()
-            if (responseContactos.isNotEmpty()){
+            if (responseContactos.isNotEmpty()) {
                 _contactos.postValue(ResultData.Succes(responseContactos))
                 return@launch
             }

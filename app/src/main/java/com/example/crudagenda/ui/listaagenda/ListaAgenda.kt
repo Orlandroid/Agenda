@@ -3,17 +3,18 @@ package com.example.crudagenda.ui.listaagenda
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.modelo.Contacto
-import com.example.crudagenda.util.AlertMessageDialog
-import com.example.crudagenda.util.ListenerAlertDialog
-import com.example.crudagenda.util.ResultData
-import com.example.crudagenda.util.showSnack
+import com.example.crudagenda.util.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -22,8 +23,6 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
 
     private var _binding: FragmentListaAgendaBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private val viewModel: ViewModelListaAgenda by viewModels()
     private val TAG = "LISTA_AGENDA"
@@ -42,6 +41,10 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
 
     private fun setUpUi() {
         setUpObserver()
+        binding.recyclerViewContactos.adapter = adapter
+        CoroutineScope(Dispatchers.Main).launch {
+            adapter.setData(viewModel.getContactos() as MutableList<Contacto>)
+        }
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listaAgenda_to_addContact)
         }
@@ -67,7 +70,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
         when (item.itemId) {
             R.id.submenu_eliminar -> {
                 val alert = AlertMessageDialog(requireContext(), getListener())
-                alert.showAlertDialog()
+                alert.showAlertDialog("¿Estas seguro que deseas eliminar todos los contactos?")
                 return true
             }
         }
@@ -115,6 +118,8 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     override fun btnEliminar() {
         Log.w(TAG, "Eliminado")
         viewModel.deleteAllContacts()
+        CoroutineScope(Dispatchers.Main).launch {
+            adapter.setData(viewModel.getContactos() as MutableList<Contacto>)
+        }
     }
-
 }

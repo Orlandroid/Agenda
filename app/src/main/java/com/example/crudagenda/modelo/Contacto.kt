@@ -1,5 +1,6 @@
 package com.example.crudagenda.modelo
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey

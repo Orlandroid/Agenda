@@ -20,6 +20,10 @@ import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.crudagenda.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
 
 
 @AndroidEntryPoint
@@ -102,27 +106,25 @@ class AddContact : Fragment() {
                 val data: Intent? = result.data
                 imageUri = data?.data
                 binding.imagen.setImageURI(imageUri)
-                imageUri?.let { saveImageBase64(it) }
+                val path = getPath(requireContext(), imageUri)
+                if (path != null) {
+                    imageBase64 = path
+                }
+                Log.w("imageURI", imageUri.toString())
             }
         }
 
-    private fun saveImageBase64(imageUri: Uri) {
-        val imageBitmap = getImageBitmapFromUri(requireContext(), imageUri)
-        imageBase64 = getImageBase64FromBitMap(imageBitmap)
-    }
 
     private fun getValues() {
-        if (imageBase64.isEmpty() or (imageBase64 == "")) {
-            Toast.makeText(requireContext(), "Debes de ingresar una imagen", Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
+        Log.w("IMAGEN", imageBase64)
         val name = binding.txtName.editText?.text.toString()
         val phone = binding.txtTelefono.editText?.text.toString()
         val birthday = binding.txtCumple.editText?.text.toString()
         val note = binding.txtNota.editText?.text.toString()
-        viewModel.insertContact(name, phone, birthday, note, imageUri.toString())
-        findNavController().popBackStack()
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.insertContact(name, phone, birthday, note, imageUri.toString())
+            findNavController().popBackStack()
+        }
     }
 
 

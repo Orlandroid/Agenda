@@ -1,7 +1,5 @@
 package com.example.crudagenda.repositorio
 
-
-import android.util.Log
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.modelo.ContactoDao
 import javax.inject.Inject
@@ -11,8 +9,6 @@ class ContactoRepository @Inject constructor(private val db: ContactoDao) {
 
 
     suspend fun addContacto(contacto: Contacto) {
-        val usuario = db.insert(contacto)
-        Log.w("USUARIO",usuario.toString())
         db.insert(contacto)
     }
 
