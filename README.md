@@ -11,7 +11,7 @@ los contactos
 - ViewBinding
 - MVVM
 - Dagger-Hilt
-- Demo https://www.youtube.com/watch?v=Gf-AuousTBk
+- Demo https://www.youtube.com/watch?v=AnXiGef8is0
 
 #Capturas
 <div style="display: flex;">
