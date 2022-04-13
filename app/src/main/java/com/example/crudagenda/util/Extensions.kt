@@ -6,6 +6,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
@@ -17,6 +18,14 @@ fun View.showSnack(message: String) {
 
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Context.showToast(message: String, durationShort: Boolean = false) {
+    if (durationShort) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        return
+    }
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
 
 fun Activity.hideKeyboard() {

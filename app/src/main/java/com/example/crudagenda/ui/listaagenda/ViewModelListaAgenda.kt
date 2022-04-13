@@ -50,7 +50,7 @@ class ViewModelListaAgenda @Inject constructor(
                 _contactos.postValue(ResultData.Succes(responseContactos))
                 return@launch
             }
-            _contactos.postValue(ResultData.Error("Aun no hay ningun contacto en la base de datos"))
+            _contactos.postValue(ResultData.NoData())
         }
     }
 

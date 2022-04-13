@@ -33,7 +33,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentListaAgendaBinding.inflate(inflater, container, false)
         setUpUi()
         return binding.root
@@ -79,7 +79,7 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
 
 
     private fun setUpObserver() {
-        viewModel.contactos.observe(viewLifecycleOwner, {
+        viewModel.contactos.observe(viewLifecycleOwner) {
             when (it) {
                 is ResultData.Error -> {
                     binding.root.showSnack(it.message!!)
@@ -99,16 +99,34 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
                 is ResultData.Loading -> {
                     visibilityProgres(true)
                 }
+                is ResultData.NoData -> {
+                    visibilityProgres(false)
+                    binding.lottieImage.setAnimation(getRandomNoDataAnimation())
+                }
             }
-        })
+        }
     }
+
+    private fun getRandomNoDataAnimation(): Int =
+        when ((1..3).random()) {
+            1 -> {
+                R.raw.no_data_animation
+            }
+            2 -> {
+                R.raw.no_data_available
+            }
+
+            else -> R.raw.no_data_found
+        }
 
     private fun visibilityProgres(visible: Boolean) {
         if (visible) {
             binding.progressBar.visibility = View.VISIBLE
+            binding.lottieImage.visibility = View.VISIBLE
             return
         }
         binding.progressBar.visibility = View.INVISIBLE
+        binding.lottieImage.visibility = View.INVISIBLE
     }
 
     override fun btnCancel() {

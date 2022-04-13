@@ -41,7 +41,7 @@ class AddContact : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddContactBinding.inflate(layoutInflater, container, false)
         setUpUi()
         setUpObserver()
@@ -65,7 +65,7 @@ class AddContact : Fragment() {
     }
 
     private fun setUpObserver() {
-        viewModel.progresBar.observe(viewLifecycleOwner, {
+        viewModel.progresBar.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {
                     binding.progressBar3.visibility = View.VISIBLE
@@ -74,7 +74,7 @@ class AddContact : Fragment() {
                     binding.progressBar3.visibility = View.INVISIBLE
                 }
             }
-        })
+        }
     }
 
 

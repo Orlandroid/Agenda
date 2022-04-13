@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
 
-class ListaAgendaAdapter() :
+class ListaAgendaAdapter :
     RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
 
     private var listaContactos = mutableListOf<Contacto>()
