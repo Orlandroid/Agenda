@@ -1,5 +1,7 @@
 package com.example.crudagenda.repositorio
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.modelo.ContactoDao
 import javax.inject.Inject
@@ -12,8 +14,8 @@ class ContactoRepository @Inject constructor(private val db: ContactoDao) {
         db.insert(contacto)
     }
 
-    suspend fun getAllContacs(): List<Contacto> {
-        return db.getAllContacs()
+    fun getAllContacs(): LiveData<List<Contacto>> {
+        return db.getAllContacs().asLiveData()
     }
 
     suspend fun updateContact(contacto: Contacto) {

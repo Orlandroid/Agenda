@@ -11,6 +11,8 @@ import android.widget.Toast
 import java.io.ByteArrayOutputStream
 import java.io.File
 
+
+
 fun getImageBitmapFromUri(context: Context, imageUri: Uri): Bitmap {
     return MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
 }
@@ -31,7 +33,7 @@ fun getImageBase64FromBitMap(bitmap: Bitmap): String {
 }
 
 
- fun sendToast(context: Context, message: String) =
+fun sendToast(context: Context, message: String) =
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
 

@@ -1,21 +1,16 @@
 package com.example.crudagenda.ui.listaagenda
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
-import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class ListaAgenda : Fragment(), ListenerAlertDialog {
@@ -40,11 +35,11 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     }
 
     private fun setUpUi() {
-        setUpObserver()
-        binding.recyclerViewContactos.adapter = adapter
-        CoroutineScope(Dispatchers.Main).launch {
-            adapter.setData(viewModel.getContactos() as MutableList<Contacto>)
+        viewModel.getAllContacts().observe(viewLifecycleOwner) {
+            binding.progressBar.visibility=View.GONE
+            adapter.setData(it.toMutableList())
         }
+        binding.recyclerViewContactos.adapter = adapter
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listaAgenda_to_addContact)
         }
@@ -77,67 +72,15 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
         return super.onOptionsItemSelected(item)
     }
 
-
-    private fun setUpObserver() {
-        viewModel.contactos.observe(viewLifecycleOwner) {
-            when (it) {
-                is ResultData.Error -> {
-                    binding.root.showSnack(it.message!!)
-                    visibilityProgres(false)
-                }
-                is ResultData.Succes -> {
-                    visibilityProgres(false)
-                    if (it.data != null) {
-                        binding.recyclerViewContactos.adapter = adapter
-                        adapter.setData(it.data as MutableList<Contacto>)
-                    }
-                }
-                is ResultData.ErrorNetwork -> {
-                    binding.root.showSnack(it.message!!)
-                    visibilityProgres(false)
-                }
-                is ResultData.Loading -> {
-                    visibilityProgres(true)
-                }
-                is ResultData.NoData -> {
-                    visibilityProgres(false)
-                    binding.lottieImage.setAnimation(getRandomNoDataAnimation())
-                }
-            }
-        }
-    }
-
-    private fun getRandomNoDataAnimation(): Int =
-        when ((1..3).random()) {
-            1 -> {
-                R.raw.no_data_animation
-            }
-            2 -> {
-                R.raw.no_data_available
-            }
-
-            else -> R.raw.no_data_found
-        }
-
-    private fun visibilityProgres(visible: Boolean) {
-        if (visible) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.lottieImage.visibility = View.VISIBLE
-            return
-        }
-        binding.progressBar.visibility = View.INVISIBLE
-        binding.lottieImage.visibility = View.INVISIBLE
-    }
-
     override fun btnCancel() {
-        Log.w(TAG, "CANCEL")
+
     }
 
     override fun btnEliminar() {
-        Log.w(TAG, "Eliminado")
-        viewModel.deleteAllContacts()
-        CoroutineScope(Dispatchers.Main).launch {
-            adapter.setData(viewModel.getContactos() as MutableList<Contacto>)
+        lifecycleScope.launch {
+            viewModel.deleteAllContacts()
+            binding.progressBar.visibility = View.VISIBLE
         }
+        viewModel.getAllContacts()
     }
 }

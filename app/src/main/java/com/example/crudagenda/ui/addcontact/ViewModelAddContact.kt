@@ -1,8 +1,7 @@
 package com.example.crudagenda.ui.addcontact
 
 
-
-import android.util.Log
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,24 +13,35 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModelAddContact @Inject constructor(private val contactoRepository: ContactoRepository) :
+class ViewModelAddContact @Inject constructor(private val repository: ContactoRepository) :
     ViewModel() {
 
-    private val TAG = this.javaClass.toString()
     private val _progressBar = MutableLiveData<Boolean>()
     val progresBar: MutableLiveData<Boolean>
         get() = _progressBar
+    private val _isUpateContact = MutableLiveData<Boolean>()
+    val isUpateContact: MutableLiveData<Boolean>
+        get() = _isUpateContact
 
 
-    suspend fun insertContact(name: String, phone: String, birthday: String, note: String, image: String) {
+    suspend fun insertContact(
+        name: String,
+        phone: String,
+        birthday: String,
+        note: String,
+        image: Bitmap
+    ) {
         progresBar.postValue(true)
-        Log.w(TAG,"INSERTANDO CONTACTO")
         val contact = Contacto(0, name, phone, birthday, note, image)
-        val response = viewModelScope.launch(Dispatchers.IO) {
-            contactoRepository.addContacto(contact)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.addContacto(contact)
+                _isUpateContact.postValue(true)
+            } catch (e: Exception) {
+                _isUpateContact.postValue(false)
+            }
             progresBar.postValue(false)
         }
-        response.join()
     }
 
 }

@@ -1,15 +1,16 @@
 package com.example.crudagenda.modelo
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContactoDao {
 
     @Query("SELECT * FROM contactos")
-    suspend fun getAllContacs(): List<Contacto>
+    fun getAllContacs(): Flow<List<Contacto>>
 
     @Query("SELECT * FROM contactos where id = :id")
-    suspend fun getById(id: Int): Contacto
+    fun getById(id: Int): Flow<Contacto>
 
     @Query("DELETE  FROM contactos")
     suspend fun deleteAll()

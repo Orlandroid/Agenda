@@ -14,13 +14,13 @@ import javax.inject.Inject
 class ViewModelUpdate @Inject constructor(private val contactoRepository: ContactoRepository) :
     ViewModel() {
 
-    fun deleteContacto(contacto: Contacto) {
+    suspend fun deleteContacto(contacto: Contacto) {
         viewModelScope.launch(Dispatchers.IO) {
             contactoRepository.deleteContacto(contacto)
         }
     }
 
-    fun updateContacto(contacto: Contacto) {
+    suspend fun updateContacto(contacto: Contacto) {
         viewModelScope.launch(Dispatchers.IO) {
             contactoRepository.updateContact(contacto)
         }

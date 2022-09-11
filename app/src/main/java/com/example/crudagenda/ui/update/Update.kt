@@ -2,11 +2,11 @@ package com.example.crudagenda.ui.update
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.crudagenda.R
@@ -15,6 +15,8 @@ import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.util.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class Update : Fragment() {
@@ -22,15 +24,13 @@ class Update : Fragment() {
     private val args by navArgs<UpdateArgs>()
     private var _binding: FragmentUpdateBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private val viewModel: ViewModelUpdate by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
         val view = binding.root
         setDataArgs()
@@ -62,13 +62,14 @@ class Update : Fragment() {
                 alert.setTitle("Confirmacion")
                     .setMessage("¿ Estas seguro que deseas eliminar el contacto ?")
                     .setPositiveButton("Eliminar") { dialog, _ ->
-                        viewModel.deleteContacto(args.currentContact)
+                        lifecycleScope.launch {
+                            viewModel.deleteContacto(args.currentContact)
+                        }
                         Toast.makeText(
                             requireContext(),
                             "Se ha elimnado el contacto",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.i("DELETE", "Eliminado")
                         findNavController().popBackStack()
                         dialog.dismiss()
                     }
@@ -88,8 +89,7 @@ class Update : Fragment() {
         binding.updateTxtNombre.text.toString(),
         binding.updateTxtPhone.text.toString(),
         binding.updateTxtBirthday.text.toString(),
-        binding.updateTxtNote.text.toString(),
-        ""
+        binding.updateTxtNote.text.toString()
     )
 
 
@@ -102,7 +102,9 @@ class Update : Fragment() {
     }
 
     private fun updateContacto(contacto: Contacto) {
-        viewModel.updateContacto(contacto)
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.updateContacto(contacto)
+        }
         Toast.makeText(requireContext(), "Actualizado", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
     }
