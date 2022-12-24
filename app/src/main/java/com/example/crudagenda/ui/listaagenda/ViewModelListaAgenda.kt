@@ -16,7 +16,7 @@ class ViewModelListaAgenda @Inject constructor(
     ViewModel() {
 
 
-    suspend fun deleteAllContacts() {
+    fun deleteAllContacts() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllContactos()
         }

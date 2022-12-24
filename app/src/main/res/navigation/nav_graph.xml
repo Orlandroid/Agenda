@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listaAgenda"
-        android:name="com.example.crudagenda.ui.listaagenda.ListaAgenda"
+        android:name="com.example.crudagenda.ui.listaagenda.ListaAgendaFragment"
         android:label="fragment_lista_agenda"
         tools:layout="@layout/fragment_lista_agenda">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/addContact"
-        android:name="com.example.crudagenda.ui.addcontact.AddContact"
+        android:name="com.example.crudagenda.ui.addcontact.AddContactFragment"
         android:label="fragment_add_contact"
         tools:layout="@layout/fragment_add_contact">
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/update"
-        android:name="com.example.crudagenda.ui.update.Update"
+        android:name="com.example.crudagenda.ui.update.UpdateFragment"
         android:label="fragment_update"
         tools:layout="@layout/fragment_update">
         <action

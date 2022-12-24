@@ -7,9 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
+import com.example.crudagenda.util.loadImageWithAnimation
 
 class ListaAgendaAdapter :
     RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
@@ -33,7 +33,7 @@ class ListaAgendaAdapter :
             phone.text = contact.phone
             birthday.text = contact.birthday
             note.text = contact.note
-            Glide.with(itemView.context).load(contact.image).into(image)
+            image.loadImageWithAnimation(contact.image!!)
         }
     }
 
@@ -47,7 +47,7 @@ class ListaAgendaAdapter :
         val contacto = listaContactos[position]
         viewHolder.bind(contacto)
         viewHolder.itemView.setOnClickListener {
-            val accion = ListaAgendaDirections.actionListaAgendaToUpdate(contacto)
+            val accion = ListaAgendaFragmentDirections.actionListaAgendaToUpdate(contacto)
             viewHolder.itemView.findNavController().navigate(accion)
         }
     }

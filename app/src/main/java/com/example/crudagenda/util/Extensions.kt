@@ -4,15 +4,23 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.provider.MediaStore
+import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.crudagenda.R
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 fun View.showSnack(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
@@ -34,6 +42,12 @@ fun Context.showToast(message: String, durationShort: Boolean = false) {
 fun ImageView.getImageLikeBitmap(): Bitmap {
     return (this.drawable as BitmapDrawable).bitmap
 }
+
+fun ImageView.loadImageWithAnimation(bitmapImage: Bitmap) {
+    Glide.with(context).load(bitmapImage).transition(DrawableTransitionOptions.withCrossFade())
+        .placeholder(R.drawable.loading_animation).into(this)
+}
+
 
 fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
@@ -61,6 +75,39 @@ fun View.invisible() {
     this.visibility = View.INVISIBLE
 }
 
-fun ImageView.changeDrawableColor(color: Int){
+fun TextInputLayout.getText(): String {
+    return editText?.text.toString().trim()
+}
+
+fun ImageView.changeDrawableColor(color: Int) {
     this.setColorFilter(resources.getColor(color))
+}
+
+fun Bitmap.toBase64(): String {
+    var result = ""
+    val baos = ByteArrayOutputStream()
+    try {
+        compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        baos.flush()
+        baos.close()
+        val bitmapBytes = baos.toByteArray()
+        result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT)
+    } catch (e: IOException) {
+        e.printStackTrace()
+    } finally {
+        try {
+            baos.flush()
+            baos.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    return result
+}
+
+fun String.base64StringToBitmap(): Bitmap {
+    val baos = ByteArrayOutputStream()
+    var imageBytes: ByteArray = baos.toByteArray()
+    imageBytes = Base64.decode(this, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }

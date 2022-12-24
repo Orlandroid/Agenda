@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
 import com.example.crudagenda.util.*
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AddContact : Fragment() {
+class AddContactFragment : Fragment() {
 
 
     private var _binding: FragmentAddContactBinding? = null
@@ -56,7 +57,7 @@ class AddContact : Fragment() {
         binding.txtCumple.setEndIconOnClickListener {
             showDatePickerDialog()
         }
-        binding.imagen.setImageResource(R.drawable.unknown)
+        Glide.with(requireActivity()).load(R.drawable.unknown).circleCrop().into(binding.imagen)
     }
 
     private fun setUpObserver() {
@@ -117,7 +118,7 @@ class AddContact : Fragment() {
         val name = binding.txtName.editText?.text.toString()
         val phone = binding.txtTelefono.editText?.text.toString()
         val birthday = binding.txtCumple.editText?.text.toString()
-        var note = binding.txtNota.editText?.text.toString()
+        var note = binding.txtNota.editText?.text.toString().trim()
         if (note.isEmpty()) {
             note = ""
         }

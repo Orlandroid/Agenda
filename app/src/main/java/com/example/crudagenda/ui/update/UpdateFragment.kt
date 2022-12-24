@@ -1,27 +1,28 @@
 package com.example.crudagenda.ui.update
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.crudagenda.R
-import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.databinding.FragmentUpdateBinding
+import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.util.DatePickerFragment
+import com.example.crudagenda.util.getImageLikeBitmap
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class Update : Fragment() {
+class UpdateFragment : Fragment() {
 
-    private val args by navArgs<UpdateArgs>()
+    private val args by navArgs<UpdateFragmentArgs>()
     private var _binding: FragmentUpdateBinding? = null
 
     private val binding get() = _binding!!
@@ -34,10 +35,10 @@ class Update : Fragment() {
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
         val view = binding.root
         setDataArgs()
-        binding.updateButton.setOnClickListener {
+        binding.buttonUpdate.setOnClickListener {
             updateContacto(getContact())
         }
-        binding.updateTxtBirthday.setOnClickListener {
+        binding.txtCumple.setOnClickListener {
             showDatePickerDialog()
         }
         return view
@@ -86,19 +87,21 @@ class Update : Fragment() {
 
     private fun getContact(): Contacto = Contacto(
         args.currentContact.id,
-        binding.updateTxtNombre.text.toString(),
-        binding.updateTxtPhone.text.toString(),
-        binding.updateTxtBirthday.text.toString(),
-        binding.updateTxtNote.text.toString()
+        binding.txtName.editText!!.text.toString(),
+        binding.txtTelefono.editText!!.text.toString(),
+        binding.txtCumple.editText!!.text.toString(),
+        binding.txtNota.editText!!.text.toString().trim(),
+        binding.imagen.getImageLikeBitmap()
     )
 
 
-    private fun setDataArgs() {
+    private fun setDataArgs() = with(binding){
         val contacto = args.currentContact
-        binding.updateTxtNombre.setText(contacto.name)
-        binding.updateTxtPhone.setText(contacto.phone)
-        binding.updateTxtBirthday.setText(contacto.birthday)
-        binding.updateTxtNote.setText(contacto.note)
+        txtName.editText!!.setText(contacto.name)
+        txtTelefono.editText!!.setText(contacto.phone)
+        txtCumple.editText!!.setText(contacto.birthday)
+        txtNota.editText!!.setText(contacto.note)
+        Glide.with(requireActivity()).load(args.currentContact.image).into(imagen)
     }
 
     private fun updateContacto(contacto: Contacto) {
@@ -112,9 +115,9 @@ class Update : Fragment() {
 
     private fun showDatePickerDialog() {
         val newFragment =
-            DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            DatePickerFragment.newInstance({ _, year, month, day ->
                 val selectedDate = day.toString() + " / " + (month + 1) + " / " + year
-                binding.updateTxtBirthday.setText(selectedDate)
+                binding.txtCumple.editText!!.setText(selectedDate)
             }, requireContext())
         activity?.let { newFragment.show(it.supportFragmentManager, "datePicker") }
     }

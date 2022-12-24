@@ -8,19 +8,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
+
 import com.example.crudagenda.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ListaAgenda : Fragment(), ListenerAlertDialog {
+class ListaAgendaFragment : Fragment(), ListenerAlertDialog {
 
 
     private var _binding: FragmentListaAgendaBinding? = null
 
     private val binding get() = _binding!!
     private val viewModel: ViewModelListaAgenda by viewModels()
-    private val TAG = "LISTA_AGENDA"
     private val adapter = ListaAgendaAdapter()
 
     private fun getListener(): ListenerAlertDialog = this
@@ -34,13 +34,20 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
         return binding.root
     }
 
-    private fun setUpUi() {
+    private fun setUpUi() = with(binding) {
+        progressBar.visible()
         viewModel.getAllContacts().observe(viewLifecycleOwner) {
-            binding.progressBar.visibility=View.GONE
-            adapter.setData(it.toMutableList())
+            if (it.isEmpty()) {
+                adapter.setData(mutableListOf())
+                tvNoData.visible()
+            } else {
+                tvNoData.gone()
+                adapter.setData(it.toMutableList())
+            }
+            progressBar.gone()
         }
-        binding.recyclerViewContactos.adapter = adapter
-        binding.floatingActionButton.setOnClickListener {
+        recyclerViewContactos.adapter = adapter
+        floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listaAgenda_to_addContact)
         }
     }
@@ -77,10 +84,8 @@ class ListaAgenda : Fragment(), ListenerAlertDialog {
     }
 
     override fun btnEliminar() {
-        lifecycleScope.launch {
-            viewModel.deleteAllContacts()
-            binding.progressBar.visibility = View.VISIBLE
-        }
-        viewModel.getAllContacts()
+        viewModel.deleteAllContacts()
+        binding.progressBar.visible()
     }
+
 }
