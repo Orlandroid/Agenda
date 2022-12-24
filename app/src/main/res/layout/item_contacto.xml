@@ -15,75 +15,70 @@
 
         <TextView
             android:id="@+id/item_nombre"
-            android:layout_width="201dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageContacto"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_telefono"
-            android:layout_width="201dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageContacto"
+            app:layout_constraintStart_toStartOf="@+id/item_nombre"
             app:layout_constraintTop_toBottomOf="@+id/item_nombre" />
 
         <TextView
             android:id="@+id/item_cumple"
-            android:layout_width="201dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageContacto"
+            app:layout_constraintStart_toStartOf="@+id/item_telefono"
             app:layout_constraintTop_toBottomOf="@+id/item_telefono" />
 
         <TextView
             android:id="@+id/item_nota"
-            android:layout_width="201dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageContacto"
+            app:layout_constraintStart_toStartOf="@+id/item_cumple"
             app:layout_constraintTop_toBottomOf="@+id/item_cumple" />
 
         <ImageView
             android:id="@+id/imageContacto"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/item_nombre"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/unknown" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

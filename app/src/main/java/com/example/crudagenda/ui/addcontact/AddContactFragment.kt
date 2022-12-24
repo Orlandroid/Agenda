@@ -30,8 +30,6 @@ class AddContactFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ViewModelAddContact by viewModels()
     private var imageUri: Uri? = null
-    private var imageBase64: String = ""
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

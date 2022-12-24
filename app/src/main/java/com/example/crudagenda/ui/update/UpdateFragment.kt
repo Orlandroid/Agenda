@@ -1,8 +1,12 @@
 package com.example.crudagenda.ui.update
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +18,7 @@ import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.modelo.Contacto
 import com.example.crudagenda.util.DatePickerFragment
 import com.example.crudagenda.util.getImageLikeBitmap
+import com.example.crudagenda.util.openGaleryToChoseImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +32,7 @@ class UpdateFragment : Fragment() {
 
     private val binding get() = _binding!!
     private val viewModel: ViewModelUpdate by viewModels()
+    private var imageUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +44,11 @@ class UpdateFragment : Fragment() {
         binding.buttonUpdate.setOnClickListener {
             updateContacto(getContact())
         }
-        binding.txtCumple.setOnClickListener {
+        binding.txtCumple.setEndIconOnClickListener {
             showDatePickerDialog()
+        }
+        binding.imagen.setOnClickListener {
+            //openGaleryToChoseImage(resultLauncher)
         }
         return view
     }
@@ -63,9 +72,7 @@ class UpdateFragment : Fragment() {
                 alert.setTitle("Confirmacion")
                     .setMessage("¿ Estas seguro que deseas eliminar el contacto ?")
                     .setPositiveButton("Eliminar") { dialog, _ ->
-                        lifecycleScope.launch {
-                            viewModel.deleteContacto(args.currentContact)
-                        }
+                        viewModel.deleteContacto(args.currentContact)
                         Toast.makeText(
                             requireContext(),
                             "Se ha elimnado el contacto",
@@ -95,7 +102,7 @@ class UpdateFragment : Fragment() {
     )
 
 
-    private fun setDataArgs() = with(binding){
+    private fun setDataArgs() = with(binding) {
         val contacto = args.currentContact
         txtName.editText!!.setText(contacto.name)
         txtTelefono.editText!!.setText(contacto.phone)
@@ -112,6 +119,14 @@ class UpdateFragment : Fragment() {
         findNavController().popBackStack()
     }
 
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                imageUri = data?.data
+                binding.imagen.setImageURI(imageUri)
+            }
+        }
 
     private fun showDatePickerDialog() {
         val newFragment =
