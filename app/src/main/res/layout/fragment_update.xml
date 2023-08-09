@@ -1,154 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
-
-    <Button
-        android:id="@+id/button_update"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/actualizar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/button_update"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/root_view"
+        <Button
+            android:id="@+id/button_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            tools:context=".ui.addcontact.AddContactFragment">
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/actualizar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
-            <ProgressBar
-                android:id="@+id/progressBar3"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/button_update"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/root_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:fitsSystemWindows="true"
+                tools:context=".ui.addcontact.AddContactFragment">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:hint="@string/nombre"
-                android:inputType="textPersonName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imagen">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
+                <ProgressBar
+                    android:id="@+id/progressBar3"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_telefono"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txt_name"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/telefono"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:ems="10"
+                    android:hint="@string/nombre"
+                    android:inputType="textPersonName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imagen">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_cumple"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:orientation="horizontal"
-                app:endIconDrawable="@drawable/ic_today"
-                app:endIconMode="custom"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_telefono">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txt_telefono"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:hint="@string/cumplea_os"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:ems="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_name">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_nota"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_cumple">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/telefono"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txt_cumple"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/notas"
-                    android:maxLines="10" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:orientation="horizontal"
+                    app:endIconDrawable="@drawable/ic_today"
+                    app:endIconMode="custom"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_telefono">
 
-            <ImageView
-                android:id="@+id/imagen"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_marginTop="8dp"
-                android:contentDescription="@string/description"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/cumplea_os"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txt_nota"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:ems="10"
+                    android:inputType="textMultiLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_cumple">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/notas"
+                        android:maxLines="10" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/imagen"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/description"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

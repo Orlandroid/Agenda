@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.modelo.Contacto
+import com.example.crudagenda.util.click
 import com.example.crudagenda.util.loadImageWithAnimation
 
 class ListaAgendaAdapter :
@@ -46,7 +47,7 @@ class ListaAgendaAdapter :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val contacto = listaContactos[position]
         viewHolder.bind(contacto)
-        viewHolder.itemView.setOnClickListener {
+        viewHolder.itemView.click {
             val accion = ListaAgendaFragmentDirections.actionListaAgendaToUpdate(contacto)
             viewHolder.itemView.findNavController().navigate(accion)
         }

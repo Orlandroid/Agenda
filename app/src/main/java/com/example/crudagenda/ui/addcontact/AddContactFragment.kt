@@ -3,45 +3,40 @@ package com.example.crudagenda.ui.addcontact
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddContactBinding
-import com.example.crudagenda.util.*
+import com.example.crudagenda.ui.MainActivity
+import com.example.crudagenda.ui.base.BaseFragment
+import com.example.crudagenda.util.DatePickerFragment
+import com.example.crudagenda.util.getImageLikeBitmap
+import com.example.crudagenda.util.hideKeyboard
+import com.example.crudagenda.util.invisible
+import com.example.crudagenda.util.openGaleryToChoseImage
+import com.example.crudagenda.util.showToast
+import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AddContactFragment : Fragment() {
+class AddContactFragment : BaseFragment<FragmentAddContactBinding>(R.layout.fragment_add_contact) {
 
 
-    private var _binding: FragmentAddContactBinding? = null
-
-    private val binding get() = _binding!!
     private val viewModel: ViewModelAddContact by viewModels()
     private var imageUri: Uri? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentAddContactBinding.inflate(layoutInflater, container, false)
-        setUpUi()
-        setUpObserver()
-        return binding.root
-    }
+    override fun configureToolbar() = MainActivity.ToolbarConfiguration(
+        showToolbar = true,
+        toolbarTitle = getString(R.string.agregar_contacto)
+    )
 
-    private fun setUpUi() {
+    override fun setUpUi() {
         doOnTextChange()
         binding.rootView.setOnClickListener {
             hideKeyboard()
@@ -58,12 +53,13 @@ class AddContactFragment : Fragment() {
         Glide.with(requireActivity()).load(R.drawable.unknown).circleCrop().into(binding.imagen)
     }
 
-    private fun setUpObserver() {
+    override fun observerViewModel() {
         viewModel.progresBar.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {
                     binding.progressBar3.visible()
                 }
+
                 false -> {
                     binding.progressBar3.invisible()
                 }
@@ -144,9 +140,5 @@ class AddContactFragment : Fragment() {
         activity?.let { newFragment.show(it.supportFragmentManager, "datePicker") }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
 }

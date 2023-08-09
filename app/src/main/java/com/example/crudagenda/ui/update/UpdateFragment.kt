@@ -4,10 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,41 +17,40 @@ import com.bumptech.glide.Glide
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.modelo.Contacto
+import com.example.crudagenda.ui.MainActivity
+import com.example.crudagenda.ui.base.BaseFragment
 import com.example.crudagenda.util.DatePickerFragment
+import com.example.crudagenda.util.click
 import com.example.crudagenda.util.getImageLikeBitmap
-import com.example.crudagenda.util.openGaleryToChoseImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class UpdateFragment : Fragment() {
+class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_update) {
 
     private val args by navArgs<UpdateFragmentArgs>()
-    private var _binding: FragmentUpdateBinding? = null
 
-    private val binding get() = _binding!!
     private val viewModel: ViewModelUpdate by viewModels()
     private var imageUri: Uri? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
-        val view = binding.root
+    override fun configureToolbar() = MainActivity.ToolbarConfiguration(
+        showToolbar = true,
+        toolbarTitle = getString(R.string.editar_contacto)
+    )
+
+    override fun setUpUi() {
         setDataArgs()
-        binding.buttonUpdate.setOnClickListener {
+        binding.buttonUpdate.click {
             updateContacto(getContact())
         }
         binding.txtCumple.setEndIconOnClickListener {
             showDatePickerDialog()
         }
-        binding.imagen.setOnClickListener {
+        binding.imagen.click {
             //openGaleryToChoseImage(resultLauncher)
         }
-        return view
     }
 
 

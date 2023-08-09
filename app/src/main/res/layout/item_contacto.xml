@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -23,7 +22,7 @@
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view"
             app:layout_constraintStart_toEndOf="@+id/imageContacto"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,11 +31,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_nombre"
             app:layout_constraintStart_toStartOf="@+id/item_nombre"
             app:layout_constraintTop_toBottomOf="@+id/item_nombre" />
 
@@ -45,11 +43,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_telefono"
             app:layout_constraintStart_toStartOf="@+id/item_telefono"
             app:layout_constraintTop_toBottomOf="@+id/item_telefono" />
 
@@ -58,18 +55,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_cumple"
             app:layout_constraintStart_toStartOf="@+id/item_cumple"
             app:layout_constraintTop_toBottomOf="@+id/item_cumple" />
 
         <ImageView
             android:id="@+id/imageContacto"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
@@ -78,6 +74,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/unknown" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:background="@color/low_priority"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

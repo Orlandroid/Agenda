@@ -63,6 +63,10 @@ fun Fragment.openGaleryToChoseImage(resultLauncher: ActivityResultLauncher<Inten
     resultLauncher.launch(gallery)
 }
 
+fun View.click(click: () -> Unit) {
+    setOnClickListener { click() }
+}
+
 fun View.visible() {
     this.visibility = View.VISIBLE
 }

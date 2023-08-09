@@ -13,4 +13,6 @@
     <string name="actualizar">Actualizar</string>
     <string name="nombre">Nombre</string>
     <string name="a_n_no_tienes_datos">Aún no tienes datos</string>
+    <string name="agregar_contacto">Agregar contacto</string>
+    <string name="editar_contacto">Editar contacto</string>
 </resources>

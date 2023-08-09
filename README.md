@@ -49,6 +49,6 @@ https://user-images.githubusercontent.com/39423969/209451740-47118604-5831-4a71-
     <td><img src="screenshots/ingresar2_night.png" width="100%"></td>
     <td><img src="screenshots/update_night.png" width="100%"></td>
   </tr>
-    <table>
+    </table>
 </div>
 

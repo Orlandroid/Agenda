@@ -1,40 +1,38 @@
 package com.example.crudagenda.ui.listaagenda
 
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
-
-import com.example.crudagenda.util.*
+import com.example.crudagenda.ui.MainActivity
+import com.example.crudagenda.ui.base.BaseFragment
+import com.example.crudagenda.util.AlertMessageDialog
+import com.example.crudagenda.util.ListenerAlertDialog
+import com.example.crudagenda.util.gone
+import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ListaAgendaFragment : Fragment(), ListenerAlertDialog {
+class ListaAgendaFragment :
+    BaseFragment<FragmentListaAgendaBinding>(R.layout.fragment_lista_agenda), ListenerAlertDialog {
 
 
-    private var _binding: FragmentListaAgendaBinding? = null
-
-    private val binding get() = _binding!!
     private val viewModel: ViewModelListaAgenda by viewModels()
     private val adapter = ListaAgendaAdapter()
 
+    override fun configureToolbar() = MainActivity.ToolbarConfiguration(
+        showToolbar = true,
+        toolbarTitle = "My title",
+        showArrow = false
+    )
+
     private fun getListener(): ListenerAlertDialog = this
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentListaAgendaBinding.inflate(inflater, container, false)
-        setUpUi()
-        return binding.root
-    }
-
-    private fun setUpUi() = with(binding) {
+    override fun setUpUi() = with(binding) {
         progressBar.visible()
         viewModel.getAllContacts().observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
@@ -55,11 +53,6 @@ class ListaAgendaFragment : Fragment(), ListenerAlertDialog {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 

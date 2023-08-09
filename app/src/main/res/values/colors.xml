@@ -9,4 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="card_view_background">#6f74dd</color>
     <color name="background">#ebedef</color>
+    <color name="higth_priority">#FF0000</color>
+    <color name="medium_priority">#FFD700</color>
+    <color name="low_priority">#008080</color>
+    <color name="status_bar_color">#3700B3</color>
+    <color name="always_white">#FFFFFFFF</color>
+    <color name="always_black">#FF000000</color>
 </resources>
