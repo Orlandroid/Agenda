@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 33
     buildToolsVersion "31.0.0"
 
     buildFeatures {
@@ -65,8 +65,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
     /***Navigation Componet**/
-    implementation "androidx.navigation:navigation-fragment-ktx:2.7.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.7.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.6.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.6.0"
 
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.45"
