@@ -15,4 +15,14 @@
     <string name="a_n_no_tienes_datos">Aún no tienes datos</string>
     <string name="agregar_contacto">Agregar contacto</string>
     <string name="editar_contacto">Editar contacto</string>
+    <string name="title">Title</string>
+    <string name="contenido">Contenido</string>
+    <string name="t_tulo">Título</string>
+    <string name="descripci_n">Descripción</string>
+    <string name="agregar">Agregar</string>
+    <array name="priority">
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
+    </array>
 </resources>

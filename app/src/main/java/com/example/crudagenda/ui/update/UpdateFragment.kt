@@ -13,15 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentUpdateBinding
-import com.example.crudagenda.modelo.Contacto
+import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
 import com.example.crudagenda.util.DatePickerFragment
 import com.example.crudagenda.util.click
-import com.example.crudagenda.util.getImageLikeBitmap
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +41,7 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
     override fun setUpUi() {
         setDataArgs()
         binding.buttonUpdate.click {
-            updateContacto(getContact())
+            // updateNote()
         }
         binding.txtCumple.setEndIconOnClickListener {
             showDatePickerDialog()
@@ -72,7 +70,7 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
                 alert.setTitle("Confirmacion")
                     .setMessage("¿ Estas seguro que deseas eliminar el contacto ?")
                     .setPositiveButton("Eliminar") { dialog, _ ->
-                        viewModel.deleteContacto(args.currentContact)
+                        //viewModel.deleteNote(args.currentContact)
                         Toast.makeText(
                             requireContext(),
                             "Se ha elimnado el contacto",
@@ -92,6 +90,7 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
         return super.onOptionsItemSelected(item)
     }
 
+    /*
     private fun getContact(): Contacto = Contacto(
         args.currentContact.id,
         binding.txtName.editText!!.text.toString(),
@@ -99,21 +98,22 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
         binding.txtCumple.editText!!.text.toString(),
         binding.txtNota.editText!!.text.toString().trim(),
         binding.imagen.getImageLikeBitmap()
-    )
+    )*/
 
 
     private fun setDataArgs() = with(binding) {
+        /*
         val contacto = args.currentContact
         txtName.editText!!.setText(contacto.name)
         txtTelefono.editText!!.setText(contacto.phone)
         txtCumple.editText!!.setText(contacto.birthday)
         txtNota.editText!!.setText(contacto.note)
-        Glide.with(requireActivity()).load(args.currentContact.image).into(imagen)
+        Glide.with(requireActivity()).load(args.currentContact.image).into(imagen)*/
     }
 
-    private fun updateContacto(contacto: Contacto) {
+    private fun updateNote(note: Note) {
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.updateContacto(contacto)
+            viewModel.updateNote(note)
         }
         Toast.makeText(requireContext(), "Actualizado", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()

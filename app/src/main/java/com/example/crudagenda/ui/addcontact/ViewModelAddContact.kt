@@ -5,15 +5,16 @@ import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.crudagenda.modelo.Contacto
-import com.example.crudagenda.repositorio.ContactoRepository
+import com.example.crudagenda.db.modelo.Note
+import com.example.crudagenda.db.modelo.Priority
+import com.example.crudagenda.repositorio.NotesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModelAddContact @Inject constructor(private val repository: ContactoRepository) :
+class ViewModelAddContact @Inject constructor(private val repository: NotesRepository) :
     ViewModel() {
 
     private val _progressBar = MutableLiveData<Boolean>()
@@ -24,23 +25,18 @@ class ViewModelAddContact @Inject constructor(private val repository: ContactoRe
         get() = _isUpateContact
 
 
-    suspend fun insertContact(
-        name: String,
-        phone: String,
-        birthday: String,
-        note: String,
-        image: Bitmap
+    suspend fun insertNote(
+        title: String,
+        description: String,
+        priority: Priority,
     ) {
-        progresBar.postValue(true)
-        val contact = Contacto(0, name, phone, birthday, note, image)
+        val note = Note(title = title, description = description, priority = priority)
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                repository.addContacto(contact)
-                _isUpateContact.postValue(true)
+                repository.addNote(note)
             } catch (e: Exception) {
-                _isUpateContact.postValue(false)
+                e.printStackTrace()
             }
-            progresBar.postValue(false)
         }
     }
 

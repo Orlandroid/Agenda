@@ -3,65 +3,64 @@ package com.example.crudagenda.ui.addcontact
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.crudagenda.R
-import com.example.crudagenda.databinding.FragmentAddContactBinding
+import com.example.crudagenda.databinding.FragmentAddNoteBinding
+import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
-import com.example.crudagenda.util.DatePickerFragment
-import com.example.crudagenda.util.getImageLikeBitmap
+import com.example.crudagenda.util.click
 import com.example.crudagenda.util.hideKeyboard
-import com.example.crudagenda.util.invisible
-import com.example.crudagenda.util.openGaleryToChoseImage
 import com.example.crudagenda.util.showToast
-import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AddContactFragment : BaseFragment<FragmentAddContactBinding>(R.layout.fragment_add_contact) {
+class AddContactFragment : BaseFragment<FragmentAddNoteBinding>(R.layout.fragment_add_note) {
 
 
     private val viewModel: ViewModelAddContact by viewModels()
     private var imageUri: Uri? = null
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
-        showToolbar = true,
-        toolbarTitle = getString(R.string.agregar_contacto)
+        showToolbar = true, toolbarTitle = getString(R.string.agregar_contacto)
     )
 
-    override fun setUpUi() {
+    override fun setUpUi() = with(binding) {
         doOnTextChange()
-        binding.rootView.setOnClickListener {
+        rootView.click {
             hideKeyboard()
         }
-        binding.imagen.setOnClickListener {
-            openGaleryToChoseImage(resultLauncher)
+        buttonInsertar.click {
+            saveNote()
         }
-        binding.buttonInsertar.setOnClickListener {
-            getValues()
-        }
-        binding.txtCumple.setEndIconOnClickListener {
-            showDatePickerDialog()
-        }
-        Glide.with(requireActivity()).load(R.drawable.unknown).circleCrop().into(binding.imagen)
+        setUpAutocomplete()
+    }
+
+    private fun setUpAutocomplete() = with(binding) {
+        val priorityList = arrayOf("Low", "Normal", "High")
+        val adapter = ArrayAdapter(
+            requireContext(), R.layout.support_simple_spinner_dropdown_item, priorityList
+        )
+        autoCompletePriority.setAdapter(adapter)
+        autoCompletePriority.setText(priorityList[0], false)
     }
 
     override fun observerViewModel() {
         viewModel.progresBar.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {
-                    binding.progressBar3.visible()
+                    //binding.progressBar3.visible()
                 }
 
                 false -> {
-                    binding.progressBar3.invisible()
+                    //binding.progressBar3.invisible()
                 }
             }
             viewModel.isUpateContact.observe(viewLifecycleOwner) { isUpdate ->
@@ -77,68 +76,30 @@ class AddContactFragment : BaseFragment<FragmentAddContactBinding>(R.layout.frag
 
     private fun doOnTextChange() {
         with(binding) {
-            txtName.editText?.doOnTextChanged { _, _, _, _ ->
+            title.editText?.doOnTextChanged { _, _, _, _ ->
                 binding.buttonInsertar.isEnabled = !areEmptyFields()
             }
-            txtTelefono.editText?.doOnTextChanged { _, _, _, _ ->
-                binding.buttonInsertar.isEnabled = !areEmptyFields()
-            }
-            txtNota.editText?.doOnTextChanged { _, _, _, _ ->
+            description.editText?.doOnTextChanged { _, _, _, _ ->
                 binding.buttonInsertar.isEnabled = !areEmptyFields()
             }
         }
     }
 
     private fun areEmptyFields(): Boolean {
-        val nombreIsEmpty = binding.txtName.editText?.text.toString().trim().isEmpty()
-        val telefonoIsEmpty = binding.txtTelefono.editText?.text.toString().trim().isEmpty()
-        val birthdayIsEmpty = binding.txtCumple.editText?.text.toString().trim().isEmpty()
-        return nombreIsEmpty or telefonoIsEmpty or birthdayIsEmpty
+        val nombreIsEmpty = binding.title.editText?.text.toString().trim().isEmpty()
+        val telefonoIsEmpty = binding.description.editText?.text.toString().trim().isEmpty()
+        return nombreIsEmpty or telefonoIsEmpty
     }
 
-
-    private var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                imageUri = data?.data
-                binding.imagen.setImageURI(imageUri)
-            }
-        }
-
-
-    private fun getValues() {
-
-        val name = binding.txtName.editText?.text.toString()
-        val phone = binding.txtTelefono.editText?.text.toString()
-        val birthday = binding.txtCumple.editText?.text.toString()
-        var note = binding.txtNota.editText?.text.toString().trim()
-        if (note.isEmpty()) {
-            note = ""
-        }
+    private fun saveNote() {
+        val title = binding.title.editText?.text.toString()
+        val description = binding.description.editText?.text.toString()
         lifecycleScope.launch {
-            viewModel.insertContact(
-                name = name,
-                phone = phone,
-                birthday = birthday,
-                note = note,
-                image = binding.imagen.getImageLikeBitmap()
+            viewModel.insertNote(
+                title = title, description = description, priority = Priority.HIGH
             )
         }
         findNavController().popBackStack()
 
     }
-
-
-    private fun showDatePickerDialog() {
-        val newFragment =
-            DatePickerFragment.newInstance({ _, year, month, day ->
-                val selectedDate = day.toString() + " / " + (month + 1) + " / " + year
-                binding.txtCumple.editText?.setText(selectedDate)
-                binding.buttonInsertar.isEnabled = !areEmptyFields()
-            }, requireContext())
-        activity?.let { newFragment.show(it.supportFragmentManager, "datePicker") }
-    }
-
-
 }

@@ -3,44 +3,36 @@ package com.example.crudagenda.ui.listaagenda
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
-import com.example.crudagenda.modelo.Contacto
+import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.util.click
-import com.example.crudagenda.util.loadImageWithAnimation
 
 class ListaAgendaAdapter :
     RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
 
-    private var listaContactos = mutableListOf<Contacto>()
+    private var listaContactos = mutableListOf<Note>()
 
-    fun setData(contatos: MutableList<Contacto>) {
-        listaContactos = contatos
+    fun setData(notes: MutableList<Note>) {
+        listaContactos = notes
         notifyDataSetChanged()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val name: TextView = view.findViewById(R.id.item_nombre)
-        val phone: TextView = view.findViewById(R.id.item_telefono)
-        val birthday: TextView = view.findViewById(R.id.item_cumple)
-        val note: TextView = view.findViewById(R.id.item_nota)
-        val image: ImageView = view.findViewById(R.id.imageContacto)
+        private val title: TextView = view.findViewById(R.id.title)
+        private val description: TextView = view.findViewById(R.id.description)
 
-        fun bind(contact: Contacto) {
-            name.text = contact.name
-            phone.text = contact.phone
-            birthday.text = contact.birthday
-            note.text = contact.note
-            image.loadImageWithAnimation(contact.image!!)
+        fun bind(note: Note) {
+            title.text = note.title
+            description.text = note.description
         }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_contacto, viewGroup, false)
+            .inflate(R.layout.item_note, viewGroup, false)
         return ViewHolder(view)
     }
 
@@ -48,7 +40,8 @@ class ListaAgendaAdapter :
         val contacto = listaContactos[position]
         viewHolder.bind(contacto)
         viewHolder.itemView.click {
-            val accion = ListaAgendaFragmentDirections.actionListaAgendaToUpdate(contacto)
+            val accion =
+                ListaAgendaFragmentDirections.actionListaAgendaToUpdate(contacto.toString())
             viewHolder.itemView.findNavController().navigate(accion)
         }
     }
