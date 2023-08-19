@@ -1,10 +1,8 @@
 package com.example.crudagenda.ui.addcontact
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.ArrayAdapter
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope

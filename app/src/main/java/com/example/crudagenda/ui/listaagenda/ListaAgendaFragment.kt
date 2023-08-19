@@ -8,11 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
+import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.util.gone
+import com.example.crudagenda.util.toJson
 import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,12 +24,10 @@ class ListaAgendaFragment :
 
 
     private val viewModel: ViewModelListaAgenda by viewModels()
-    private val adapter = ListaAgendaAdapter()
+    private val adapter = ListaAgendaAdapter(clickOnItem = { clickOnItem(it) })
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
-        showToolbar = true,
-        toolbarTitle = "My title",
-        showArrow = false
+        showToolbar = true, toolbarTitle = "My title", showArrow = false
     )
 
     private fun getListener(): ListenerAlertDialog = this
@@ -48,6 +48,10 @@ class ListaAgendaFragment :
         floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listaAgenda_to_addContact)
         }
+    }
+
+    private fun clickOnItem(note: Note) {
+        findNavController().navigate(ListaAgendaFragmentDirections.actionListaAgendaToUpdate(note.toJson()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -10,7 +10,7 @@ import com.example.crudagenda.R
 import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.util.click
 
-class ListaAgendaAdapter :
+class ListaAgendaAdapter(private val clickOnItem: (Note) -> Unit) :
     RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
 
     private var listaContactos = mutableListOf<Note>()
@@ -40,9 +40,7 @@ class ListaAgendaAdapter :
         val contacto = listaContactos[position]
         viewHolder.bind(contacto)
         viewHolder.itemView.click {
-            val accion =
-                ListaAgendaFragmentDirections.actionListaAgendaToUpdate(contacto.toString())
-            viewHolder.itemView.findNavController().navigate(accion)
+            clickOnItem(contacto)
         }
     }
 

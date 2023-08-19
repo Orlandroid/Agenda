@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_addContact_to_listaAgenda"
             app:destination="@id/listaAgenda" />
+        <argument
+            android:name="note"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/update"
