@@ -2,6 +2,7 @@ package com.example.crudagenda.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.crudagenda.R
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private var navController: NavController? = null
+    private var searchViewConfig = SearchViewConfig()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
     }
 
-    fun changeTitleToolbar(title: String) {
+    private fun changeTitleToolbar(title: String) {
         binding.toolbarLayout.toolbarTitle.text = title
     }
 
@@ -63,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         changeTitleToolbar(configuration.toolbarTitle)
         showToolbar(configuration.showToolbar)
         canShowArrow(configuration.showArrow)
+        showSearchView(configuration.showSearchView)
+        setUpSearchView()
     }
 
     private fun canShowArrow(showArrow: Boolean) {
@@ -73,12 +77,59 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showSearchView(show: Boolean) {
+        if (show) {
+            binding.searchView.visible()
+        } else {
+            binding.searchView.gone()
+        }
+    }
+
+    fun setSearchViewConfig(config: SearchViewConfig) {
+        searchViewConfig = config
+        showDeleteIcon(config.showDeleteIcon)
+    }
+
+    private fun setUpSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchViewConfig.onQueryTextSubmit(query ?: "")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchViewConfig.onQueryTextChange(newText ?: "")
+                return false
+            }
+        })
+        binding.imageView.click {
+            searchViewConfig.clickOnDeleteIcon()
+        }
+    }
+
+    private fun showDeleteIcon(show: Boolean) {
+        if (show) {
+            binding.imageView.visible()
+        } else {
+            binding.imageView.gone()
+        }
+    }
+
 
     data class ToolbarConfiguration(
         val showToolbar: Boolean = false,
         val clickOnBack: (() -> Unit)? = null,
         val toolbarTitle: String = "",
-        val showArrow: Boolean = true
+        val showArrow: Boolean = true,
+        val showSearchView: Boolean = false,
+    )
+
+    data class SearchViewConfig(
+        val showSearchView: Boolean = false,
+        val onQueryTextSubmit: (query: String) -> Unit = {},
+        val onQueryTextChange: (newText: String) -> Unit = {},
+        val showDeleteIcon: Boolean = false,
+        val clickOnDeleteIcon: () -> Unit = {}
     )
 
 }

@@ -41,6 +41,8 @@ abstract class BaseFragment<ViewBinding : ViewDataBinding>(@LayoutRes protected 
 
     open fun configureToolbar() = MainActivity.ToolbarConfiguration()
 
+    open fun configSearchView() = MainActivity.SearchViewConfig()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +50,7 @@ abstract class BaseFragment<ViewBinding : ViewDataBinding>(@LayoutRes protected 
         observerViewModel()
         (requireActivity() as MainActivity).apply {
             setToolbarConfiguration(configureToolbar())
+            setSearchViewConfig(configSearchView())
         }
     }
 

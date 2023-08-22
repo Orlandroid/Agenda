@@ -80,7 +80,6 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
                 ""
             }
         }
-
     }
 
 

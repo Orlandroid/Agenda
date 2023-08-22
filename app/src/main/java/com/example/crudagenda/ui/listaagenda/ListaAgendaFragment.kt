@@ -1,9 +1,5 @@
 package com.example.crudagenda.ui.listaagenda
 
-import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
@@ -20,17 +16,31 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ListaAgendaFragment :
-    BaseFragment<FragmentListaAgendaBinding>(R.layout.fragment_lista_agenda), ListenerAlertDialog {
+    BaseFragment<FragmentListaAgendaBinding>(R.layout.fragment_lista_agenda) {
 
 
     private val viewModel: ViewModelListaAgenda by viewModels()
     private val adapter = ListaAgendaAdapter(clickOnItem = { clickOnItem(it) })
+    private var alertMessageDialog: AlertMessageDialog? = null
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
-        showToolbar = true, toolbarTitle = "My title", showArrow = false
+        showToolbar = true, toolbarTitle = "My title", showArrow = false, showSearchView = true
     )
 
-    private fun getListener(): ListenerAlertDialog = this
+    override fun configSearchView() = MainActivity.SearchViewConfig(
+        showDeleteIcon = true,
+        showSearchView = true,
+        onQueryTextChange = {
+            //add search
+        },
+        onQueryTextSubmit = {
+            //add search
+        },
+        clickOnDeleteIcon = {
+            alertMessageDialog?.showAlertDialog("¿Estas seguro que deseas eliminar todos los contactos?")
+        }
+    )
+
 
     override fun setUpUi() = with(binding) {
         progressBar.visible()
@@ -48,41 +58,25 @@ class ListaAgendaFragment :
         floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listaAgenda_to_addContact)
         }
+        setUpAlertDialogDelete()
+    }
+
+    private fun setUpAlertDialogDelete() {
+        alertMessageDialog = AlertMessageDialog(requireContext(), object : ListenerAlertDialog {
+            override fun btnCancel() {
+
+            }
+
+            override fun btnEliminar() {
+                viewModel.deleteAllContacts()
+            }
+
+        })
+
     }
 
     private fun clickOnItem(note: Note) {
         findNavController().navigate(ListaAgendaFragmentDirections.actionListaAgendaToUpdate(note.toJson()))
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_lista_agenda, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.submenu_eliminar -> {
-                val alert = AlertMessageDialog(requireContext(), getListener())
-                alert.showAlertDialog("¿Estas seguro que deseas eliminar todos los contactos?")
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun btnCancel() {
-
-    }
-
-    override fun btnEliminar() {
-        viewModel.deleteAllContacts()
-        binding.progressBar.visible()
     }
 
 }

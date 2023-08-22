@@ -89,15 +89,31 @@ class AddContactFragment : BaseFragment<FragmentAddNoteBinding>(R.layout.fragmen
         return nombreIsEmpty or telefonoIsEmpty
     }
 
+    private fun getPriority(): Priority {
+        return when (binding.autoCompletePriority.text.toString()) {
+            "Low" -> {
+                Priority.LOW
+            }
+
+            "Normal" -> {
+                Priority.MEDIUM
+            }
+
+            else -> {
+                Priority.HIGH
+            }
+        }
+    }
+
+
     private fun saveNote() {
         val title = binding.title.editText?.text.toString()
         val description = binding.description.editText?.text.toString()
         lifecycleScope.launch {
             viewModel.insertNote(
-                title = title, description = description, priority = Priority.HIGH
+                title = title, description = description, priority = getPriority()
             )
         }
         findNavController().popBackStack()
-
     }
 }

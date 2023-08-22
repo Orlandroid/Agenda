@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
 import com.example.crudagenda.db.modelo.Note
+import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.util.click
 
 class ListaAgendaAdapter(private val clickOnItem: (Note) -> Unit) :
@@ -23,10 +23,28 @@ class ListaAgendaAdapter(private val clickOnItem: (Note) -> Unit) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val title: TextView = view.findViewById(R.id.title)
         private val description: TextView = view.findViewById(R.id.description)
+        private val view: View = view.findViewById(R.id.view)
 
         fun bind(note: Note) {
             title.text = note.title
             description.text = note.description
+            view.setBackgroundColor(itemView.context.resources.getColor(getPriorityColor(note.priority)))
+        }
+
+        private fun getPriorityColor(priority: Priority): Int {
+            return when (priority) {
+                Priority.LOW -> {
+                    R.color.low_priority
+                }
+
+                Priority.MEDIUM -> {
+                    R.color.medium_priority
+                }
+
+                Priority.HIGH -> {
+                    R.color.higth_priority
+                }
+            }
         }
     }
 
