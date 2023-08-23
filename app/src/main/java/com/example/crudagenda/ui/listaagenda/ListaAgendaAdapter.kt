@@ -3,6 +3,7 @@ package com.example.crudagenda.ui.listaagenda
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
@@ -10,7 +11,11 @@ import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.util.click
 
-class ListaAgendaAdapter(private val clickOnItem: (Note) -> Unit) :
+
+class ListaAgendaAdapter(
+    private val clickOnItem: (Note) -> Unit,
+    private val clickOnCheck: (Boolean, Note) -> Unit
+) :
     RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
 
     private var listaContactos = mutableListOf<Note>()
@@ -24,11 +29,17 @@ class ListaAgendaAdapter(private val clickOnItem: (Note) -> Unit) :
         private val title: TextView = view.findViewById(R.id.title)
         private val description: TextView = view.findViewById(R.id.description)
         private val view: View = view.findViewById(R.id.view)
+        private val check: CheckBox = view.findViewById(R.id.checkbox)
 
-        fun bind(note: Note) {
+        fun bind(note: Note, clickOnCheck: (Boolean, Note) -> Unit) {
             title.text = note.title
             description.text = note.description
             view.setBackgroundColor(itemView.context.resources.getColor(getPriorityColor(note.priority)))
+            check.isChecked = note.isComplete
+            check.setOnCheckedChangeListener { _, isChecked ->
+                clickOnCheck(isChecked, note)
+            }
+
         }
 
         private fun getPriorityColor(priority: Priority): Int {
@@ -56,7 +67,7 @@ class ListaAgendaAdapter(private val clickOnItem: (Note) -> Unit) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val contacto = listaContactos[position]
-        viewHolder.bind(contacto)
+        viewHolder.bind(contacto, clickOnCheck)
         viewHolder.itemView.click {
             clickOnItem(contacto)
         }

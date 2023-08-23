@@ -10,7 +10,7 @@ data class Note(
     val id: Int = 0,
     val title: String,
     val description: String,
-    val isComplete: Boolean = false,
+    var isComplete: Boolean = false,
     val priority: Priority
 )
 

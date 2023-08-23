@@ -7,6 +7,7 @@ import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
+import com.example.crudagenda.ui.update.ViewModelUpdate
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.util.gone
@@ -20,7 +21,14 @@ class ListaAgendaFragment :
 
 
     private val viewModel: ViewModelListaAgenda by viewModels()
-    private val adapter = ListaAgendaAdapter(clickOnItem = { clickOnItem(it) })
+    private val viewModelUpdate: ViewModelUpdate by viewModels()
+    private val adapter = ListaAgendaAdapter(
+        clickOnItem = { clickOnItem(it) },
+        clickOnCheck = { isCheck, note ->
+            note.isComplete = isCheck
+            viewModelUpdate.updateNote(note)
+        }
+    )
     private var alertMessageDialog: AlertMessageDialog? = null
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
