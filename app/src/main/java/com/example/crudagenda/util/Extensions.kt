@@ -14,9 +14,13 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.crudagenda.R
+import com.example.crudagenda.ui.MainActivity
+import com.example.crudagenda.util.MainAlert.Companion.ERROR_MESSAGE
+import com.example.crudagenda.util.MainAlert.Companion.SUCCESS_MESSAGE
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import java.io.ByteArrayOutputStream
@@ -30,6 +34,50 @@ fun View.showSnack(message: String) {
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
 }
+
+fun Fragment.showProgress(show: Boolean) {
+    if (requireActivity() is MainActivity) {
+        (requireActivity() as MainActivity).showProgress(show)
+    }
+}
+
+fun Fragment.showErrorApi(
+    shouldCloseTheViewOnApiError: Boolean = false,
+    messageBody: String = getString(R.string.error_service)
+) {
+    val dialog = MainAlert(kindOfMessage = ERROR_MESSAGE,
+        messageBody = messageBody,
+        clickOnAccept = {
+            if (shouldCloseTheViewOnApiError) {
+                findNavController().popBackStack()
+            }
+        })
+    activity?.let { dialog.show(it.supportFragmentManager, "alertMessage") }
+}
+
+fun Fragment.showErrorNetwork(shouldCloseTheViewOnApiError: Boolean = false) {
+    val dialog = MainAlert(kindOfMessage = ERROR_MESSAGE,
+        messageBody = getString(R.string.verifica_conexion),
+        clickOnAccept = {
+            if (shouldCloseTheViewOnApiError) {
+                findNavController().popBackStack()
+            }
+        })
+    activity?.let { dialog.show(it.supportFragmentManager, "alertMessage") }
+}
+
+fun Fragment.showSuccessMessage(
+    message: String = getString(R.string.register_success),
+    clickOnOk: () -> Unit = {}
+) {
+    val dialog = MainAlert(
+        kindOfMessage = SUCCESS_MESSAGE,
+        messageBody = message,
+        clickOnAccept = { clickOnOk() }
+    )
+    activity?.let { dialog.show(it.supportFragmentManager, "alertMessage") }
+}
+
 
 fun Context.showToast(message: String, durationShort: Boolean = false) {
     if (durationShort) {

@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.ui.MainActivity
+import com.example.crudagenda.util.showProgress
 
 abstract class BaseFragment<ViewBinding : ViewDataBinding>(@LayoutRes protected val contentLayoutId: Int) :
     Fragment() {
@@ -55,6 +56,7 @@ abstract class BaseFragment<ViewBinding : ViewDataBinding>(@LayoutRes protected 
 
     override fun onDestroyView() {
         super.onDestroyView()
+        showProgress(false)
         _binding = null
     }
 }

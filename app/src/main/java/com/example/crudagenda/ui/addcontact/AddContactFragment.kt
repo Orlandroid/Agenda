@@ -1,7 +1,6 @@
 package com.example.crudagenda.ui.addcontact
 
 import android.net.Uri
-import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -9,13 +8,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentAddNoteBinding
+import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
 import com.example.crudagenda.util.ResultData
 import com.example.crudagenda.util.click
 import com.example.crudagenda.util.hideKeyboard
-import com.example.crudagenda.util.showToast
+import com.example.crudagenda.util.showErrorApi
+import com.example.crudagenda.util.showProgress
+import com.example.crudagenda.util.showSuccessMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -53,13 +55,18 @@ class AddContactFragment : BaseFragment<FragmentAddNoteBinding>(R.layout.fragmen
 
     override fun observerViewModel() {
         viewModel.updateContactResponse.observe(viewLifecycleOwner) {
+            showProgress(it is ResultData.Loading)
             when (it) {
                 is ResultData.Error -> {
-                    Log.w("Error", it.message.toString())
+                    showErrorApi(
+                        messageBody = "Error al guardar nota", shouldCloseTheViewOnApiError = true
+                    )
                 }
 
                 is ResultData.Success -> {
-                    Log.w("Error", "Succces")
+                    showSuccessMessage {
+                        findNavController().popBackStack()
+                    }
                 }
 
                 else -> {}
@@ -102,15 +109,16 @@ class AddContactFragment : BaseFragment<FragmentAddNoteBinding>(R.layout.fragmen
         }
     }
 
+    private fun getNote() = Note(
+        title = binding.title.editText?.text.toString(),
+        description = binding.description.editText?.text.toString(),
+        priority = getPriority()
+    )
+
 
     private fun saveNote() {
-        val title = binding.title.editText?.text.toString()
-        val description = binding.description.editText?.text.toString()
         lifecycleScope.launch {
-            viewModel.insertNote(
-                title = title, description = description, priority = getPriority()
-            )
+            viewModel.insertNote(getNote())
         }
-        findNavController().popBackStack()
     }
 }

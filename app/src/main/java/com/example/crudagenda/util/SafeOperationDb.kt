@@ -8,6 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/*
 @OptIn(DelicateCoroutinesApi::class)
 suspend inline fun <T> safeDbOperation(
     result: MutableLiveData<ResultData<T>>,
@@ -27,4 +28,4 @@ suspend inline fun <T> safeDbOperation(
             }
         }
     }
-}
+}*/

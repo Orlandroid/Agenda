@@ -33,6 +33,14 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
     }
 
+    fun showProgress(show: Boolean) {
+        if (show) {
+            binding.progressBar.visible()
+        } else {
+            binding.progressBar.gone()
+        }
+    }
+
     private fun changeTitleToolbar(title: String) {
         binding.toolbarLayout.toolbarTitle.text = title
     }

@@ -32,7 +32,10 @@ class ListaAgendaFragment :
     private var alertMessageDialog: AlertMessageDialog? = null
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
-        showToolbar = true, toolbarTitle = "My title", showArrow = false, showSearchView = true
+        showToolbar = true,
+        toolbarTitle = "Notas",
+        showArrow = false,
+        showSearchView = true
     )
 
     override fun configSearchView() = MainActivity.SearchViewConfig(

@@ -13,13 +13,20 @@
     <string name="actualizar">Actualizar</string>
     <string name="nombre">Nombre</string>
     <string name="a_n_no_tienes_datos">Aún no tienes datos</string>
-    <string name="agregar_contacto">Agregar contacto</string>
-    <string name="editar_contacto">Editar contacto</string>
+    <string name="agregar_contacto">Agregar nota</string>
+    <string name="editar_contacto">Editar nota</string>
     <string name="title">Title</string>
     <string name="contenido">Contenido</string>
     <string name="t_tulo">Título</string>
     <string name="descripci_n">Descripción</string>
     <string name="agregar">Agregar</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="tittle_message">Tittle message</string>
+    <string name="cancelar_dialog">Cancelar</string>
+    <string name="body_message">Body message</string>
+    <string name="error_service">Servicio no disponible, intente más tarde.</string>
+    <string name="verifica_conexion">Verifica tu conexion de internet</string>
+    <string name="register_success">Se ha guardado el registro correctamente</string>
     <array name="priority">
         <item>Low</item>
         <item>Normal</item>
