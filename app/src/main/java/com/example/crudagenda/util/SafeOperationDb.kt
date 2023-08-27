@@ -1,23 +1,27 @@
 package com.example.crudagenda.util
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-suspend inline fun <T> ViewModel.safeDbOperation(
+@OptIn(DelicateCoroutinesApi::class)
+suspend inline fun <T> safeDbOperation(
     result: MutableLiveData<ResultData<T>>,
     crossinline dbOperation: suspend () -> Unit,
 ) {
-    viewModelScope.launch(Dispatchers.IO) {
+    GlobalScope.launch(Dispatchers.IO) {
         try {
             withContext(Dispatchers.Main) {
                 result.value = ResultData.Loading()
             }
             dbOperation()
+            Log.w("Android", "dbOperation")
         } catch (e: Exception) {
+            Log.w("Error", e.message.toString())
             withContext(Dispatchers.Main) {
                 result.value = ResultData.Error(e.message)
             }

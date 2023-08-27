@@ -12,6 +12,7 @@ import com.example.crudagenda.databinding.FragmentAddNoteBinding
 import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
+import com.example.crudagenda.util.ResultData
 import com.example.crudagenda.util.click
 import com.example.crudagenda.util.hideKeyboard
 import com.example.crudagenda.util.showToast
@@ -51,23 +52,19 @@ class AddContactFragment : BaseFragment<FragmentAddNoteBinding>(R.layout.fragmen
     }
 
     override fun observerViewModel() {
-        viewModel.progresBar.observe(viewLifecycleOwner) {
+        viewModel.updateContactResponse.observe(viewLifecycleOwner) {
             when (it) {
-                true -> {
-                    //binding.progressBar3.visible()
+                is ResultData.Error -> {
+                    Log.w("Error", it.message.toString())
                 }
 
-                false -> {
-                    //binding.progressBar3.invisible()
+                is ResultData.Success -> {
+                    Log.w("Error", "Succces")
                 }
+
+                else -> {}
             }
-            viewModel.isUpateContact.observe(viewLifecycleOwner) { isUpdate ->
-                if (isUpdate) {
-                    context?.showToast("Contacto actualizado con exito")
-                } else {
-                    context?.showToast("Error al actualizar al contacto")
-                }
-            }
+
         }
     }
 
