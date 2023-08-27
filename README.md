@@ -25,30 +25,17 @@ https://user-images.githubusercontent.com/39423969/209451740-47118604-5831-4a71-
   <table>
     <td>
       <tr>
-        <th>Lista de contactos</th>
-        <th>Ingresar contacto</th>
-        <th>Ingresar contacto</th>
-        <th>Actualizar/Eliminar contacto</th>
+        <th>Lista contactos</th>
+        <th>Agregar contactos</th>
+        <th>Editar contactos</th>
       </tr>
       <tr>
-        <td><img src="screenshots/lista.png" width="100%"></td>
-        <td><img src="screenshots/ingresar.png" width="100%"></td>
-         <td><img src="screenshots/ingresar2.png" width="100%"></td>
-        <td><img src="screenshots/update.png" width="100%"></td>
+        <td><img src="https://raw.githubusercontent.com/Orlandroid/Resources_Repos/main/noteapp/list.png" width="100%"></td>
+        <td><img src="https://raw.githubusercontent.com/Orlandroid/Resources_Repos/main/noteapp/add.png" width="100%"></td>
+         <td><img src="https://raw.githubusercontent.com/Orlandroid/Resources_Repos/main/noteapp/edit.png" width="100%"></td>
       </tr>
     </td>
-     <tr>
-    <td><strong>Lista de contactos</strong></td>
-   <td><strong>Ingresar contacto</strong></td>
-    <td><strong>Ingresar contacto</strong></td>
-    <td><strong>Actualizar/Eliminar</strong></td>
-  </tr>
-  <tr>
-    <td><img src="screenshots/lista-night.png" width="100%"></td>
-    <td><img src="screenshots/ingresar-night.png" width="100%"></td>
-    <td><img src="screenshots/ingresar2_night.png" width="100%"></td>
-    <td><img src="screenshots/update_night.png" width="100%"></td>
-  </tr>
+  
     </table>
 </div>
 
