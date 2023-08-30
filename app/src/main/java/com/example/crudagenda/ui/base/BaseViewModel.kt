@@ -1,5 +1,6 @@
 package com.example.crudagenda.ui.base
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.crudagenda.util.ResultData
@@ -20,6 +21,7 @@ abstract class BaseViewModel : ViewModel() {
             }
             dbOperation()
         } catch (e: Exception) {
+            Log.w("ERROR", e.message.toString())
             withContext(Dispatchers.Main) {
                 result.value = ResultData.Error(e.message)
             }

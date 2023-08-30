@@ -8,7 +8,13 @@ import kotlinx.coroutines.flow.Flow
 interface NoteDao {
 
     @Query("SELECT * FROM note")
-    fun getAllNotes(): Flow<List<Note>>
+    fun getAllNotesFlow(): Flow<List<Note>>
+
+    @Query("SELECT * FROM note")
+    suspend fun getAllNotes(): List<Note>
+
+    @Query("SELECT * FROM note where title LIKE :title")
+    suspend fun searchNotes(title: String): List<Note>
 
     @Query("SELECT * FROM note where id = :id")
     fun getById(id: Int): Flow<Note>
@@ -17,7 +23,7 @@ interface NoteDao {
     suspend fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(note: Note):Long
+    suspend fun insert(note: Note): Long
 
     @Delete
     suspend fun delete(note: Note)
