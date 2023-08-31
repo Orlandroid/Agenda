@@ -27,6 +27,8 @@
     <string name="error_service">Servicio no disponible, intente más tarde.</string>
     <string name="verifica_conexion">Verifica tu conexion de internet</string>
     <string name="register_success">Se ha guardado el registro correctamente</string>
+    <string name="delete_ask">¿Estás seguro que deseas eliminar la nota?</string>
+    <string name="aviso">Aviso</string>
     <array name="priority">
         <item>Low</item>
         <item>Normal</item>

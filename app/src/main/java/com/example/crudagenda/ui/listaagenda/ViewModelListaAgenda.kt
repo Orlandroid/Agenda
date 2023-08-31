@@ -1,7 +1,8 @@
 package com.example.crudagenda.ui.listaagenda
 
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.repositorio.NotesRepository
 import com.example.crudagenda.ui.base.BaseViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class ViewModelListaAgenda @Inject constructor(
@@ -25,9 +27,8 @@ class ViewModelListaAgenda @Inject constructor(
     val getAllNotesResponse: MutableLiveData<ResultData<List<Note>>>
         get() = _getAllNotesResponse
 
-    private val wait = 100L
 
-    fun deleteAllContacts() = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteAllNotes() = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteAllNotes()
     }
 
@@ -44,10 +45,14 @@ class ViewModelListaAgenda @Inject constructor(
 
     suspend fun searchNotes(title: String) {
         safeDbOperation(_getAllNotesResponse) {
-            delay(wait)
+            delay(1.seconds)
             val result = repository.searchNotes(title)
             _searchNotesResponse.value = ResultData.Success(result)
         }
+    }
+
+    fun deleteNote(note: Note) = viewModelScope.launch {
+        repository.deleteNote(note)
     }
 
 

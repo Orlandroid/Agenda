@@ -13,9 +13,8 @@ class NotesRepository @Inject constructor(private val db: NoteDao) {
     fun getAllNotesFlow(): LiveData<List<Note>> = db.getAllNotesFlow().asLiveData()
     suspend fun getAllNotes() = db.getAllNotes()
     suspend fun updateNote(note: Note) = db.update(note)
-    suspend fun deleteNote(note: Note) = db.delete(note)
+    suspend fun deleteNote(note: Note) = db.deleteNote(note)
     suspend fun deleteAllNotes() = db.deleteAll()
     suspend fun searchNotes(title: String) = db.searchNotes(title)
-
 
 }

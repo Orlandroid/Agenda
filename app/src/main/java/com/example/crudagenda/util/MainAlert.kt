@@ -71,7 +71,8 @@ class MainAlert(
                 clickOnCancel()
                 dialog?.dismiss()
             }
-            binding.bodyMessage.text = messageBody
+            bodyMessage.text = messageBody
+            titleHeader.text = getString(R.string.aviso)
         }
         setKindOfMessage()
         setKindOfView(isTwoButtonDialog)

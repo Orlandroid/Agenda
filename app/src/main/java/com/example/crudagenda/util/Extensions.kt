@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.crudagenda.R
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.util.MainAlert.Companion.ERROR_MESSAGE
+import com.example.crudagenda.util.MainAlert.Companion.INFO_MESSAGE_COLOR
 import com.example.crudagenda.util.MainAlert.Companion.SUCCESS_MESSAGE
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -74,6 +75,20 @@ fun Fragment.showSuccessMessage(
         kindOfMessage = SUCCESS_MESSAGE,
         messageBody = message,
         clickOnAccept = { clickOnOk() }
+    )
+    activity?.let { dialog.show(it.supportFragmentManager, "alertMessage") }
+}
+
+fun Fragment.showInfoMessage(
+    message: String,
+    isTwoButtonDialog: Boolean = false,
+    clickOnOk: () -> Unit = {}
+) {
+    val dialog = MainAlert(
+        kindOfMessage = INFO_MESSAGE_COLOR,
+        messageBody = message,
+        clickOnAccept = { clickOnOk() },
+        isTwoButtonDialog = isTwoButtonDialog
     )
     activity?.let { dialog.show(it.supportFragmentManager, "alertMessage") }
 }

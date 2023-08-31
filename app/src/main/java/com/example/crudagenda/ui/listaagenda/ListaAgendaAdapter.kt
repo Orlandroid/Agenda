@@ -1,45 +1,52 @@
 package com.example.crudagenda.ui.listaagenda
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudagenda.R
+import com.example.crudagenda.databinding.ItemNoteBinding
 import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.util.click
 
 
+data class ClicksNote(
+    val onClickOnItem: (Note) -> Unit,
+    val onClickOnCheck: (Boolean, Note) -> Unit,
+    val onClickOnDelete: (Note) -> Unit
+)
+
 class ListaAgendaAdapter(
-    private val clickOnItem: (Note) -> Unit,
-    private val clickOnCheck: (Boolean, Note) -> Unit
+    private val clicks: ClicksNote,
 ) :
     RecyclerView.Adapter<ListaAgendaAdapter.ViewHolder>() {
 
     private var listaContactos = mutableListOf<Note>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(notes: MutableList<Note>) {
         listaContactos = notes
         notifyDataSetChanged()
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val title: TextView = view.findViewById(R.id.title)
-        private val description: TextView = view.findViewById(R.id.description)
-        private val view: View = view.findViewById(R.id.view)
-        private val check: CheckBox = view.findViewById(R.id.checkbox)
-
-        fun bind(note: Note, clickOnCheck: (Boolean, Note) -> Unit) {
+    class ViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(note: Note, clicks: ClicksNote) = with(binding) {
             title.text = note.title
             description.text = note.description
-            view.setBackgroundColor(itemView.context.resources.getColor(getPriorityColor(note.priority)))
-            check.isChecked = note.isComplete
-            check.setOnCheckedChangeListener { _, isChecked ->
-                clickOnCheck(isChecked, note)
+            checkbox.isChecked = note.isComplete
+            checkbox.setOnCheckedChangeListener { _, isChecked ->
+                clicks.onClickOnCheck(isChecked, note)
             }
-
+            imageDelete.click {
+                clicks.onClickOnDelete(note)
+            }
+            root.click {
+                clicks.onClickOnItem(note)
+            }
+            val strokeColor = itemView.context.resources.getColor(getPriorityColor(note.priority))
+            cardView.strokeColor = strokeColor
+            view.setBackgroundColor(strokeColor)
         }
 
         private fun getPriorityColor(priority: Priority): Int {
@@ -60,17 +67,14 @@ class ListaAgendaAdapter(
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_note, viewGroup, false)
-        return ViewHolder(view)
+        val layoutInflater = LayoutInflater.from(viewGroup.context)
+        val binding = ItemNoteBinding.inflate(layoutInflater, viewGroup, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val contacto = listaContactos[position]
-        viewHolder.bind(contacto, clickOnCheck)
-        viewHolder.itemView.click {
-            clickOnItem(contacto)
-        }
+        viewHolder.bind(contacto, clicks)
     }
 
     override fun getItemCount() = listaContactos.size

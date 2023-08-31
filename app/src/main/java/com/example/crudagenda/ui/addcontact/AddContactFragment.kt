@@ -1,6 +1,5 @@
 package com.example.crudagenda.ui.addcontact
 
-import android.net.Uri
 import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -27,7 +26,6 @@ class AddContactFragment : BaseFragment<FragmentAddNoteBinding>(R.layout.fragmen
 
 
     private val viewModel: ViewModelAddContact by viewModels()
-    private var imageUri: Uri? = null
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
         showToolbar = true, toolbarTitle = getString(R.string.agregar_contacto)

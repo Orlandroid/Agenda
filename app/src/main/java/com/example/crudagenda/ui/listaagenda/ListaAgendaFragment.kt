@@ -14,6 +14,7 @@ import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.util.ResultData
 import com.example.crudagenda.util.gone
 import com.example.crudagenda.util.showErrorApi
+import com.example.crudagenda.util.showInfoMessage
 import com.example.crudagenda.util.showProgress
 import com.example.crudagenda.util.toJson
 import com.example.crudagenda.util.visible
@@ -25,18 +26,33 @@ class ListaAgendaFragment :
     BaseFragment<FragmentListaAgendaBinding>(R.layout.fragment_lista_agenda) {
 
 
-    private val viewModel: ViewModelListaAgenda by viewModels()
-    private val viewModelUpdate: ViewModelUpdate by viewModels()
-    private val adapter =
+    /*
+
+private val adapter =
         ListaAgendaAdapter(clickOnItem = { clickOnItem(it) }, clickOnCheck = { isCheck, note ->
             note.isComplete = isCheck
             viewModelUpdate.updateNote(note)
         })
+     */
+
+
+    private val viewModel: ViewModelListaAgenda by viewModels()
+    private val viewModelUpdate: ViewModelUpdate by viewModels()
+    private val adapter = ListaAgendaAdapter(clicksOnNote())
+
     private var alertMessageDialog: AlertMessageDialog? = null
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
         showToolbar = true, toolbarTitle = "Notas", showArrow = false, showSearchView = true
     )
+
+    private fun clicksOnNote() = ClicksNote(onClickOnItem = { note ->
+        clickOnItem(note)
+    }, onClickOnCheck = { check, note ->
+        clickOnCheck(check, note)
+    }, onClickOnDelete = { note ->
+        clickOnDelete(note)
+    })
 
     override fun configSearchView() = MainActivity.SearchViewConfig(showDeleteIcon = true,
         showSearchView = true,
@@ -126,7 +142,7 @@ class ListaAgendaFragment :
             }
 
             override fun btnEliminar() {
-                viewModel.deleteAllContacts()
+                viewModel.deleteAllNotes()
             }
 
         })
@@ -135,6 +151,19 @@ class ListaAgendaFragment :
 
     private fun clickOnItem(note: Note) {
         findNavController().navigate(ListaAgendaFragmentDirections.actionListaAgendaToUpdate(note.toJson()))
+    }
+
+    private fun clickOnCheck(check: Boolean, note: Note) {
+
+    }
+
+    private fun clickOnDelete(note: Note) {
+        showInfoMessage(
+            message = getString(R.string.delete_ask),
+            isTwoButtonDialog = true
+        ) {
+            viewModel.deleteNote(note)
+        }
     }
 
 }
