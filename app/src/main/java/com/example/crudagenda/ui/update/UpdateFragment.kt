@@ -1,15 +1,11 @@
 package com.example.crudagenda.ui.update
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,10 +13,15 @@ import androidx.navigation.fragment.navArgs
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentUpdateBinding
 import com.example.crudagenda.db.modelo.Note
+import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
+import com.example.crudagenda.util.ResultData
 import com.example.crudagenda.util.click
 import com.example.crudagenda.util.fromJson
+import com.example.crudagenda.util.showErrorApi
+import com.example.crudagenda.util.showProgress
+import com.example.crudagenda.util.showSuccessMessage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,6 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
     private val args by navArgs<UpdateFragmentArgs>()
 
     private val viewModel: ViewModelUpdate by viewModels()
-    private var imageUri: Uri? = null
     private val priorityList = arrayOf("Low", "Normal", "High")
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
@@ -42,7 +42,7 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
     override fun setUpUi() {
         setDataArgs(args.note.fromJson())
         binding.buttonUpdate.click {
-
+            updateNote(getNote())
         }
         setUpAutocomplete()
     }
@@ -58,6 +58,29 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
         edTitle.setText(note.title)
         edDescription.setText(note.description)
         autoCompletePriority.setText(getStatus(note.priority.name))
+    }
+
+    override fun observerViewModel() {
+        super.observerViewModel()
+        viewModel.updateNoteResponse.observe(viewLifecycleOwner) {
+            showProgress(it is ResultData.Loading)
+            when (it) {
+                is ResultData.Error -> {
+                    showErrorApi(
+                        messageBody = "Error al editar la nota", shouldCloseTheViewOnApiError = true
+                    )
+                }
+
+                is ResultData.Success -> {
+                    showSuccessMessage {
+                        findNavController().popBackStack()
+                    }
+                }
+
+                else -> {}
+            }
+
+        }
     }
 
 
@@ -117,32 +140,35 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(R.layout.fragment_upd
         return super.onOptionsItemSelected(item)
     }
 
-    /*
-    private fun getContact(): Contacto = Contacto(
-        args.currentContact.id,
-        binding.txtName.editText!!.text.toString(),
-        binding.txtTelefono.editText!!.text.toString(),
-        binding.txtCumple.editText!!.text.toString(),
-        binding.txtNota.editText!!.text.toString().trim(),
-        binding.imagen.getImageLikeBitmap()
-    )*/
+    private fun getPriority(): Priority {
+        return when (binding.autoCompletePriority.text.toString()) {
+            "Low" -> {
+                Priority.LOW
+            }
+
+            "Normal" -> {
+                Priority.MEDIUM
+            }
+
+            else -> {
+                Priority.HIGH
+            }
+        }
+    }
+
+
+    private fun getNote() = Note(
+        id = args.note.fromJson<Note>().id,
+        title = binding.title.editText?.text.toString(),
+        description = binding.edDescription.text.toString(),
+        priority = getPriority()
+    )
 
 
     private fun updateNote(note: Note) {
-        lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch {
             viewModel.updateNote(note)
         }
-        Toast.makeText(requireContext(), "Actualizado", Toast.LENGTH_SHORT).show()
-        findNavController().popBackStack()
     }
-
-    private var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                imageUri = data?.data
-                //binding.imagen.setImageURI(imageUri)
-            }
-        }
 
 }

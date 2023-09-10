@@ -7,6 +7,8 @@ import com.example.crudagenda.repositorio.NotesRepository
 import com.example.crudagenda.ui.base.BaseViewModel
 import com.example.crudagenda.util.ResultData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +27,9 @@ class ViewModelAddContact @Inject constructor(
     ) {
         safeDbOperation(_updateContactResponse) {
             val result = repository.addNote(note)
-            _updateContactResponse.value = ResultData.Success(result)
+            withContext(Dispatchers.Main) {
+                _updateContactResponse.value = ResultData.Success(result)
+            }
         }
     }
 

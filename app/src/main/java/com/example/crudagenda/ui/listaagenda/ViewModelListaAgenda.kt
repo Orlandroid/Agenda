@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -37,7 +38,9 @@ class ViewModelListaAgenda @Inject constructor(
     suspend fun getAllNotes() {
         safeDbOperation(_getAllNotesResponse) {
             val result = repository.getAllNotes()
-            _searchNotesResponse.value = ResultData.Success(result)
+            withContext(Dispatchers.Main) {
+                _searchNotesResponse.value = ResultData.Success(result)
+            }
         }
 
     }
@@ -47,7 +50,9 @@ class ViewModelListaAgenda @Inject constructor(
         safeDbOperation(_getAllNotesResponse) {
             delay(1.seconds)
             val result = repository.searchNotes(title)
-            _searchNotesResponse.value = ResultData.Success(result)
+            withContext(Dispatchers.Main) {
+                _searchNotesResponse.value = ResultData.Success(result)
+            }
         }
     }
 

@@ -19,10 +19,12 @@ abstract class BaseViewModel : ViewModel() {
             withContext(Dispatchers.Main) {
                 result.value = ResultData.Loading()
             }
-            dbOperation()
+            withContext(Dispatchers.IO) {
+                dbOperation()
+            }
         } catch (e: Exception) {
-            Log.w("ERROR", e.message.toString())
             withContext(Dispatchers.Main) {
+                Log.w("Error", e.message.toString())
                 result.value = ResultData.Error(e.message)
             }
         }
