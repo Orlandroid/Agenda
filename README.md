@@ -10,7 +10,13 @@ Aplicacion crud android en la cual puedes leer,actualizar,eliminar y editar nota
 - ViewBinding
 - MVVM
 - Dagger-Hilt
-- Demo https://www.youtube.com/watch?v=AnXiGef8is0
+- Demo https://www.youtube.com/watch?v=_iuoMEWtV1k
+
+
+
+
+https://github.com/Orlandroid/Agenda/assets/39423969/d1185d73-c70d-478a-ac68-f9f43e682710
+
 
 
 #Capturas
