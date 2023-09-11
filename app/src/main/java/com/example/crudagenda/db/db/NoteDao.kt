@@ -15,7 +15,6 @@ interface NoteDao {
 
     @Query("SELECT * FROM note where title LIKE :title")
     suspend fun searchNotes(title: String): List<Note>
-
     @Query("SELECT * FROM note where id = :id")
     fun getById(id: Int): Flow<Note>
 

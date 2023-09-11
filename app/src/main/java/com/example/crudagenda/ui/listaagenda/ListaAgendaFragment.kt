@@ -1,5 +1,6 @@
 package com.example.crudagenda.ui.listaagenda
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.example.crudagenda.util.gone
 import com.example.crudagenda.util.showErrorApi
 import com.example.crudagenda.util.showInfoMessage
 import com.example.crudagenda.util.showProgress
+import com.example.crudagenda.util.showSuccessMessage
 import com.example.crudagenda.util.toJson
 import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,13 +48,16 @@ private val adapter =
         showToolbar = true, toolbarTitle = "Notas", showArrow = false, showSearchView = true
     )
 
-    private fun clicksOnNote() = ClicksNote(onClickOnItem = { note ->
-        clickOnItem(note)
-    }, onClickOnCheck = { check, note ->
-        clickOnCheck(check, note)
-    }, onClickOnDelete = { note ->
-        clickOnDelete(note)
-    })
+    private fun clicksOnNote() = ClicksNote(
+        onClickOnItem = { note ->
+            clickOnItem(note)
+        },
+        onClickOnCheck = { check, note ->
+            clickOnCheck(check, note)
+        },
+        onClickOnDelete = { note ->
+            clickOnDelete(note)
+        })
 
     override fun configSearchView() = MainActivity.SearchViewConfig(showDeleteIcon = true,
         showSearchView = true,
@@ -133,6 +138,23 @@ private val adapter =
                 else -> {}
             }
         }
+        viewModelUpdate.updateNoteResponse.observe(viewLifecycleOwner) {
+            showProgress(it is ResultData.Loading)
+            when (it) {
+                is ResultData.Error -> {
+                    showErrorApi(
+                        messageBody = "Error al editar la nota", shouldCloseTheViewOnApiError = true
+                    )
+                }
+
+                is ResultData.Success -> {
+
+                }
+
+                else -> {}
+            }
+
+        }
     }
 
     private fun setUpAlertDialogDelete() {
@@ -154,7 +176,7 @@ private val adapter =
     }
 
     private fun clickOnCheck(check: Boolean, note: Note) {
-
+        
     }
 
     private fun clickOnDelete(note: Note) {

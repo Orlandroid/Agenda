@@ -34,10 +34,6 @@ class ListaAgendaAdapter(
         fun bind(note: Note, clicks: ClicksNote) = with(binding) {
             title.text = note.title
             description.text = note.description
-            checkbox.isChecked = note.isComplete
-            checkbox.setOnCheckedChangeListener { _, isChecked ->
-                clicks.onClickOnCheck(isChecked, note)
-            }
             imageDelete.click {
                 clicks.onClickOnDelete(note)
             }

@@ -45,7 +45,6 @@ class ViewModelListaAgenda @Inject constructor(
 
     }
 
-
     suspend fun searchNotes(title: String) {
         safeDbOperation(_getAllNotesResponse) {
             delay(1.seconds)
