@@ -1,6 +1,5 @@
 package com.example.crudagenda.ui.listaagenda
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,7 +16,6 @@ import com.example.crudagenda.util.gone
 import com.example.crudagenda.util.showErrorApi
 import com.example.crudagenda.util.showInfoMessage
 import com.example.crudagenda.util.showProgress
-import com.example.crudagenda.util.showSuccessMessage
 import com.example.crudagenda.util.toJson
 import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
