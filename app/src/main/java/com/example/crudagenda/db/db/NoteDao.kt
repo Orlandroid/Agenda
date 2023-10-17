@@ -15,6 +15,10 @@ interface NoteDao {
 
     @Query("SELECT * FROM note where title LIKE :title")
     suspend fun searchNotes(title: String): List<Note>
+
+    @Query("SELECT * FROM note where priority = :priority")
+    suspend fun getAllNotesByPriority(priority: String): List<Note>
+
     @Query("SELECT * FROM note where id = :id")
     fun getById(id: Int): Flow<Note>
 

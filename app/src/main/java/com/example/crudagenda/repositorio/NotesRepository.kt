@@ -17,4 +17,6 @@ class NotesRepository @Inject constructor(private val db: NoteDao) {
     suspend fun deleteAllNotes() = db.deleteAll()
     suspend fun searchNotes(title: String) = db.searchNotes(title)
 
+    suspend fun getAllNotesByPriority(priority: String) = db.getAllNotesByPriority(priority)
+
 }

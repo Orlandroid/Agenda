@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Agenda</string>
     <string name="eliminar">Eliminar</string>
+    <string name="filtrar">Filtrar</string>
     <string name="description">Description</string>
     <string name="update">update</string>
     <string name="birthday">Birthday</string>

@@ -8,11 +8,14 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.provider.MediaStore
 import android.util.Base64
+import android.view.Gravity
+import android.view.Menu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -177,4 +180,18 @@ fun String.base64StringToBitmap(): Bitmap {
     var imageBytes: ByteArray = baos.toByteArray()
     imageBytes = Base64.decode(this, Base64.DEFAULT)
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+}
+
+fun View.createAPopMenu(lisOfMenus: List<String>, clickOnPosition: (position: Int) -> Unit) {
+    val popUpMenu = PopupMenu(this.context, this, Gravity.START)
+    var idItem = 0
+    lisOfMenus.forEach {
+        popUpMenu.menu.add(Menu.NONE, idItem, idItem, it)
+        idItem++
+    }
+    popUpMenu.setOnMenuItemClickListener { menuItem ->
+        clickOnPosition(menuItem.itemId)
+        false
+    }
+    popUpMenu.show()
 }

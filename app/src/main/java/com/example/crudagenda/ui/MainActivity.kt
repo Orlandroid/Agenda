@@ -2,6 +2,7 @@ package com.example.crudagenda.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -113,6 +114,9 @@ class MainActivity : AppCompatActivity() {
         binding.imageView.click {
             searchViewConfig.clickOnDeleteIcon()
         }
+        binding.imageFilter.click {
+            searchViewConfig.clickOnFilter.invoke(binding.imageFilter)
+        }
     }
 
     private fun showDeleteIcon(show: Boolean) {
@@ -137,7 +141,8 @@ class MainActivity : AppCompatActivity() {
         val onQueryTextSubmit: (query: String) -> Unit = {},
         val onQueryTextChange: (newText: String) -> Unit = {},
         val showDeleteIcon: Boolean = false,
-        val clickOnDeleteIcon: () -> Unit = {}
+        val clickOnDeleteIcon: () -> Unit = {},
+        val clickOnFilter: (View) -> Unit = {}
     )
 
 }

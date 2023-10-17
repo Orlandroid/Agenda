@@ -28,6 +28,9 @@ class ViewModelListaAgenda @Inject constructor(
     val getAllNotesResponse: MutableLiveData<ResultData<List<Note>>>
         get() = _getAllNotesResponse
 
+    private val _getAllNotesByPriorityResponse = MutableLiveData<ResultData<List<Note>>>()
+    val getAllNotesByPriorityResponse = _getAllNotesByPriorityResponse
+    private val timeToDelay = 0.4
 
     fun deleteAllNotes() = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteAllNotes()
@@ -37,6 +40,7 @@ class ViewModelListaAgenda @Inject constructor(
 
     suspend fun getAllNotes() {
         safeDbOperation(_getAllNotesResponse) {
+            delay(timeToDelay.seconds)
             val result = repository.getAllNotes()
             withContext(Dispatchers.Main) {
                 _searchNotesResponse.value = ResultData.Success(result)
@@ -47,10 +51,20 @@ class ViewModelListaAgenda @Inject constructor(
 
     suspend fun searchNotes(title: String) {
         safeDbOperation(_getAllNotesResponse) {
-            delay(1.seconds)
+            delay(timeToDelay.seconds)
             val result = repository.searchNotes(title)
             withContext(Dispatchers.Main) {
                 _searchNotesResponse.value = ResultData.Success(result)
+            }
+        }
+    }
+
+    suspend fun getNotesByPriority(priority: String) {
+        safeDbOperation(_getAllNotesByPriorityResponse) {
+            delay(timeToDelay.seconds)
+            val result = repository.getAllNotesByPriority(priority)
+            withContext(Dispatchers.Main) {
+                _getAllNotesByPriorityResponse.value = ResultData.Success(result)
             }
         }
     }

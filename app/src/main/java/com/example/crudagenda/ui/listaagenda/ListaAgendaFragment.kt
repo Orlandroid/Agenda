@@ -6,12 +6,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.db.modelo.Note
+import com.example.crudagenda.db.modelo.Priority
+import com.example.crudagenda.db.modelo.Priority.*
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
 import com.example.crudagenda.ui.update.ViewModelUpdate
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.util.ResultData
+import com.example.crudagenda.util.createAPopMenu
 import com.example.crudagenda.util.gone
 import com.example.crudagenda.util.showErrorApi
 import com.example.crudagenda.util.showInfoMessage
@@ -20,20 +23,11 @@ import com.example.crudagenda.util.toJson
 import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.text.FieldPosition
 
 @AndroidEntryPoint
 class ListaAgendaFragment :
     BaseFragment<FragmentListaAgendaBinding>(R.layout.fragment_lista_agenda) {
-
-
-    /*
-
-private val adapter =
-        ListaAgendaAdapter(clickOnItem = { clickOnItem(it) }, clickOnCheck = { isCheck, note ->
-            note.isComplete = isCheck
-            viewModelUpdate.updateNote(note)
-        })
-     */
 
 
     private val viewModel: ViewModelListaAgenda by viewModels()
@@ -57,7 +51,8 @@ private val adapter =
             clickOnDelete(note)
         })
 
-    override fun configSearchView() = MainActivity.SearchViewConfig(showDeleteIcon = true,
+    override fun configSearchView() = MainActivity.SearchViewConfig(
+        showDeleteIcon = true,
         showSearchView = true,
         onQueryTextSubmit = {
             lifecycleScope.launch {
@@ -67,7 +62,53 @@ private val adapter =
         },
         clickOnDeleteIcon = {
             alertMessageDialog?.showAlertDialog("¿Estas seguro que deseas eliminar todos los contactos?")
-        })
+        },
+        clickOnFilter = {
+            it.createAPopMenu(
+                getListPriority()
+            ) { position ->
+                val priority = getPriority(position)
+                if (priority == null) {
+                    lifecycleScope.launch {
+                        adapter.setData(arrayListOf())
+                        viewModel.getAllNotes()
+                    }
+                } else {
+                    lifecycleScope.launch {
+                        adapter.setData(arrayListOf())
+                        viewModel.getNotesByPriority(priority.name)
+                    }
+                }
+            }
+        }
+    )
+
+    private fun getPriority(position: Int): Priority? {
+        when (position) {
+            0 -> {
+                return LOW
+            }
+
+            1 -> {
+                return MEDIUM
+            }
+
+            2 -> {
+                return HIGH
+            }
+
+            else -> {
+                return null
+            }
+        }
+    }
+
+    private fun getListPriority() = listOf(
+        "Low priority",
+        "Normal priority",
+        "High priority",
+        "All"
+    )
 
 
     override fun setUpUi() = with(binding) {
@@ -151,7 +192,25 @@ private val adapter =
 
                 else -> {}
             }
+        }
+        viewModel.getAllNotesByPriorityResponse.observe(viewLifecycleOwner) {
+            showProgress(it is ResultData.Loading)
+            when (it) {
+                is ResultData.Error -> {
+                    showErrorApi(
+                        messageBody = getString(R.string.error_db)
+                    )
+                }
 
+                is ResultData.Success -> {
+                    it.data?.let { notes ->
+                        adapter.setData(mutableListOf())
+                        adapter.setData(notes.toMutableList())
+                    }
+                }
+
+                else -> {}
+            }
         }
     }
 
@@ -166,7 +225,6 @@ private val adapter =
             }
 
         })
-
     }
 
     private fun clickOnItem(note: Note) {
@@ -174,7 +232,7 @@ private val adapter =
     }
 
     private fun clickOnCheck(check: Boolean, note: Note) {
-        
+
     }
 
     private fun clickOnDelete(note: Note) {
