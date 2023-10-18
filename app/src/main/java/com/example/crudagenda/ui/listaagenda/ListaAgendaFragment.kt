@@ -1,5 +1,6 @@
 package com.example.crudagenda.ui.listaagenda
 
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -7,23 +8,22 @@ import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
 import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.db.modelo.Priority
-import com.example.crudagenda.db.modelo.Priority.*
+import com.example.crudagenda.db.modelo.Priority.HIGH
+import com.example.crudagenda.db.modelo.Priority.LOW
+import com.example.crudagenda.db.modelo.Priority.MEDIUM
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
-import com.example.crudagenda.ui.update.ViewModelUpdate
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
-import com.example.crudagenda.util.ResultData
 import com.example.crudagenda.util.createAPopMenu
 import com.example.crudagenda.util.gone
-import com.example.crudagenda.util.showErrorApi
+import com.example.crudagenda.util.observeResultGenericDb
 import com.example.crudagenda.util.showInfoMessage
 import com.example.crudagenda.util.showProgress
 import com.example.crudagenda.util.toJson
 import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.text.FieldPosition
 
 @AndroidEntryPoint
 class ListaAgendaFragment :
@@ -31,7 +31,6 @@ class ListaAgendaFragment :
 
 
     private val viewModel: ViewModelListaAgenda by viewModels()
-    private val viewModelUpdate: ViewModelUpdate by viewModels()
     private val adapter = ListaAgendaAdapter(clicksOnNote())
 
     private var alertMessageDialog: AlertMessageDialog? = null
@@ -40,19 +39,15 @@ class ListaAgendaFragment :
         showToolbar = true, toolbarTitle = "Notas", showArrow = false, showSearchView = true
     )
 
-    private fun clicksOnNote() = ClicksNote(
-        onClickOnItem = { note ->
-            clickOnItem(note)
-        },
-        onClickOnCheck = { check, note ->
-            clickOnCheck(check, note)
-        },
-        onClickOnDelete = { note ->
-            clickOnDelete(note)
-        })
+    private fun clicksOnNote() = ClicksNote(onClickOnItem = { note ->
+        clickOnItem(note)
+    }, onClickOnCheck = { check, note ->
+        clickOnCheck(check, note)
+    }, onClickOnDelete = { note ->
+        clickOnDelete(note)
+    })
 
-    override fun configSearchView() = MainActivity.SearchViewConfig(
-        showDeleteIcon = true,
+    override fun configSearchView() = MainActivity.SearchViewConfig(showDeleteIcon = true,
         showSearchView = true,
         onQueryTextSubmit = {
             lifecycleScope.launch {
@@ -61,27 +56,29 @@ class ListaAgendaFragment :
             }
         },
         clickOnDeleteIcon = {
-            alertMessageDialog?.showAlertDialog("¿Estas seguro que deseas eliminar todos los contactos?")
+            alertMessageDialog?.showAlertDialog("¿Estas seguro que deseas eliminar todas las notas?")
         },
         clickOnFilter = {
-            it.createAPopMenu(
-                getListPriority()
-            ) { position ->
-                val priority = getPriority(position)
-                if (priority == null) {
-                    lifecycleScope.launch {
-                        adapter.setData(arrayListOf())
-                        viewModel.getAllNotes()
-                    }
-                } else {
-                    lifecycleScope.launch {
-                        adapter.setData(arrayListOf())
-                        viewModel.getNotesByPriority(priority.name)
-                    }
+            clickOnFilter(it)
+        })
+
+    private fun clickOnFilter(filterImage: View) {
+        filterImage.createAPopMenu(
+            getListPriority()
+        ) { position ->
+            val priority = getPriority(position)
+            adapter.setData(arrayListOf())
+            if (priority == null) {
+                lifecycleScope.launch {
+                    viewModel.getAllNotes()
+                }
+            } else {
+                lifecycleScope.launch {
+                    viewModel.getNotesByPriority(priority.name)
                 }
             }
         }
-    )
+    }
 
     private fun getPriority(position: Int): Priority? {
         when (position) {
@@ -104,10 +101,7 @@ class ListaAgendaFragment :
     }
 
     private fun getListPriority() = listOf(
-        "Low priority",
-        "Normal priority",
-        "High priority",
-        "All"
+        "Low priority", "Normal priority", "High priority", "All"
     )
 
 
@@ -139,77 +133,22 @@ class ListaAgendaFragment :
             }
             showProgress(false)
         }
-        viewModel.searchNotesResponse.observe(viewLifecycleOwner) {
-            showProgress(it is ResultData.Loading)
-            when (it) {
-                is ResultData.Error -> {
-                    showErrorApi(
-                        messageBody = getString(R.string.error_db)
-                    )
-                }
-
-                is ResultData.Success -> {
-                    it.data?.let { notes ->
-                        adapter.setData(mutableListOf())
-                        adapter.setData(notes.toMutableList())
-                    }
-                }
-
-                else -> {}
+        observeResultGenericDb(viewModel.searchNotesResponse) {
+            it?.let { notes ->
+                adapter.setData(mutableListOf())
+                adapter.setData(notes.toMutableList())
             }
         }
-        viewModel.getAllNotesResponse.observe(viewLifecycleOwner) {
-            showProgress(it is ResultData.Loading)
-            when (it) {
-                is ResultData.Error -> {
-                    showErrorApi(
-                        messageBody = getString(R.string.error_db)
-                    )
-                }
-
-                is ResultData.Success -> {
-                    it.data?.let { notes ->
-                        adapter.setData(mutableListOf())
-                        adapter.setData(notes.toMutableList())
-                    }
-                }
-
-                else -> {}
+        observeResultGenericDb(viewModel.getAllNotesResponse) {
+            it?.let { notes ->
+                adapter.setData(mutableListOf())
+                adapter.setData(notes.toMutableList())
             }
         }
-        viewModelUpdate.updateNoteResponse.observe(viewLifecycleOwner) {
-            showProgress(it is ResultData.Loading)
-            when (it) {
-                is ResultData.Error -> {
-                    showErrorApi(
-                        messageBody = "Error al editar la nota", shouldCloseTheViewOnApiError = true
-                    )
-                }
-
-                is ResultData.Success -> {
-
-                }
-
-                else -> {}
-            }
-        }
-        viewModel.getAllNotesByPriorityResponse.observe(viewLifecycleOwner) {
-            showProgress(it is ResultData.Loading)
-            when (it) {
-                is ResultData.Error -> {
-                    showErrorApi(
-                        messageBody = getString(R.string.error_db)
-                    )
-                }
-
-                is ResultData.Success -> {
-                    it.data?.let { notes ->
-                        adapter.setData(mutableListOf())
-                        adapter.setData(notes.toMutableList())
-                    }
-                }
-
-                else -> {}
+        observeResultGenericDb(viewModel.getAllNotesByPriorityResponse) {
+            it?.let { notes ->
+                adapter.setData(mutableListOf())
+                adapter.setData(notes.toMutableList())
             }
         }
     }
@@ -237,8 +176,7 @@ class ListaAgendaFragment :
 
     private fun clickOnDelete(note: Note) {
         showInfoMessage(
-            message = getString(R.string.delete_ask),
-            isTwoButtonDialog = true
+            message = getString(R.string.delete_ask), isTwoButtonDialog = true
         ) {
             viewModel.deleteNote(note)
         }
