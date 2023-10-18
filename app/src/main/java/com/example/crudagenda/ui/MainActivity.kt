@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() {
     fun setSearchViewConfig(config: SearchViewConfig) {
         searchViewConfig = config
         showDeleteIcon(config.showDeleteIcon)
+        configureFilterImage(config.showDeleteIcon)
     }
 
     private fun setUpSearchView() {
@@ -114,16 +115,24 @@ class MainActivity : AppCompatActivity() {
         binding.imageView.click {
             searchViewConfig.clickOnDeleteIcon()
         }
-        binding.imageFilter.click {
-            searchViewConfig.clickOnFilter.invoke(binding.imageFilter)
-        }
     }
-
+    
     private fun showDeleteIcon(show: Boolean) {
         if (show) {
             binding.imageView.visible()
         } else {
             binding.imageView.gone()
+        }
+    }
+
+    private fun configureFilterImage(show: Boolean) = with(binding) {
+        if (show) {
+            imageFilter.visible()
+            imageFilter.click {
+                searchViewConfig.clickOnFilter.invoke(imageFilter)
+            }
+        } else {
+            imageFilter.gone()
         }
     }
 
