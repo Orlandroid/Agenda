@@ -36,4 +36,5 @@
         <item>High</item>
     </array>
     <string name="error_db">Error en base de datos</string>
+    <string name="prioridad">Prioridad</string>
 </resources>

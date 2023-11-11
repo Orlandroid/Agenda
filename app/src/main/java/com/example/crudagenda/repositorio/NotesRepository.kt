@@ -1,16 +1,14 @@
 package com.example.crudagenda.repositorio
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.db.db.NoteDao
+import com.example.crudagenda.db.modelo.Note
 import javax.inject.Inject
 
 
 class NotesRepository @Inject constructor(private val db: NoteDao) {
 
     suspend fun addNote(note: Note) = db.insert(note)
-    fun getAllNotesFlow(): LiveData<List<Note>> = db.getAllNotesFlow().asLiveData()
+    fun getAllNotesFlow() = db.getAllNotesFlow()
     suspend fun getAllNotes() = db.getAllNotes()
     suspend fun updateNote(note: Note) = db.update(note)
     suspend fun deleteNote(note: Note) = db.deleteNote(note)

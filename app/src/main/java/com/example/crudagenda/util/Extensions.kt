@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.provider.MediaStore
 import android.util.Base64
+import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.View
@@ -17,6 +18,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -27,6 +33,9 @@ import com.example.crudagenda.util.MainAlert.Companion.INFO_MESSAGE_COLOR
 import com.example.crudagenda.util.MainAlert.Companion.SUCCESS_MESSAGE
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -194,4 +203,25 @@ fun View.createAPopMenu(lisOfMenus: List<String>, clickOnPosition: (position: In
         false
     }
     popUpMenu.show()
+}
+
+fun Fragment.showLog(message: String, tag: String = javaClass.name) {
+    Log.w(tag, message)
+}
+
+fun <T> LiveData<T>.observeOnce(observer: (T) -> Unit) {
+    observeForever(object : Observer<T> {
+        override fun onChanged(value: T) {
+            removeObserver(this)
+            observer(value)
+        }
+    })
+}
+
+fun <T> Fragment.collectLifeCycleFlow(flow: Flow<T>, collector: FlowCollector<T>) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collect(collector)
+        }
+    }
 }

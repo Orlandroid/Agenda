@@ -50,10 +50,8 @@ class ListaAgendaFragment :
     override fun configSearchView() = MainActivity.SearchViewConfig(showDeleteIcon = true,
         showSearchView = true,
         onQueryTextSubmit = {
-            lifecycleScope.launch {
-                adapter.setData(mutableListOf())
-                viewModel.searchNotes("%$it%")
-            }
+            adapter.setData(mutableListOf())
+            viewModel.searchNotes("%$it%")
         },
         clickOnDeleteIcon = {
             alertMessageDialog?.showAlertDialog("¿Estas seguro que deseas eliminar todas las notas?")
@@ -69,13 +67,9 @@ class ListaAgendaFragment :
             val priority = getPriority(position)
             adapter.setData(arrayListOf())
             if (priority == null) {
-                lifecycleScope.launch {
-                    viewModel.getAllNotes()
-                }
+                //viewModel.getAllNotesFlow()
             } else {
-                lifecycleScope.launch {
-                    viewModel.getNotesByPriority(priority.name)
-                }
+                viewModel.getNotesByPriority(priority.name)
             }
         }
     }
@@ -114,24 +108,24 @@ class ListaAgendaFragment :
             adapter.setData(mutableListOf())
             swipeRefreshLayout.isRefreshing = false
             showProgress(true)
-            lifecycleScope.launch {
-                viewModel.getAllNotes()
-            }
+            //viewModel.getAllNotesFlow()
         }
         setUpAlertDialogDelete()
     }
 
     override fun observerViewModel() {
         super.observerViewModel()
-        viewModel.getAllNotesFlow().observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                adapter.setData(mutableListOf())
-                binding.tvNoData.visible()
-            } else {
-                binding.tvNoData.gone()
-                adapter.setData(it.toMutableList())
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getAllNotesFlow().collect {
+                if (it.isEmpty()) {
+                    adapter.setData(mutableListOf())
+                    binding.tvNoData.visible()
+                } else {
+                    binding.tvNoData.gone()
+                    adapter.setData(it.toMutableList())
+                }
+                showProgress(false)
             }
-            showProgress(false)
         }
         observeResultGenericDb(viewModel.searchNotesResponse) {
             it?.let { notes ->
@@ -151,6 +145,7 @@ class ListaAgendaFragment :
                 adapter.setData(notes.toMutableList())
             }
         }
+
     }
 
     private fun setUpAlertDialogDelete() {

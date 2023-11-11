@@ -10,6 +10,7 @@ import com.example.crudagenda.util.ResultData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -30,41 +31,55 @@ class ViewModelListaAgenda @Inject constructor(
 
     private val _getAllNotesByPriorityResponse = MutableLiveData<ResultData<List<Note>>>()
     val getAllNotesByPriorityResponse = _getAllNotesByPriorityResponse
+
     private val timeToDelay = 0.4
+    //private val timeToDelay = 1
+
+
+    init {
+        viewModelScope.launch {
+            //getAllNotesFlow()
+        }
+    }
 
     fun deleteAllNotes() = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteAllNotes()
     }
 
-    fun getAllNotesFlow() = repository.getAllNotesFlow()
+    fun getAllNotesFlow() = repository.getAllNotesFlow().flowOn(Dispatchers.IO)
 
-    suspend fun getAllNotes() {
-        safeDbOperation(_getAllNotesResponse) {
-            delay(timeToDelay.seconds)
-            val result = repository.getAllNotes()
-            withContext(Dispatchers.Main) {
-                _searchNotesResponse.value = ResultData.Success(result)
-            }
-        }
-
-    }
-
-    suspend fun searchNotes(title: String) {
-        safeDbOperation(_getAllNotesResponse) {
-            delay(timeToDelay.seconds)
-            val result = repository.searchNotes(title)
-            withContext(Dispatchers.Main) {
-                _searchNotesResponse.value = ResultData.Success(result)
+    fun getAllNotes() {
+        viewModelScope.launch {
+            safeDbOperation(_getAllNotesResponse) {
+                delay(timeToDelay.seconds)
+                val result = repository.getAllNotes()
+                withContext(Dispatchers.Main) {
+                    _getAllNotesResponse.value = ResultData.Success(result)
+                }
             }
         }
     }
 
-    suspend fun getNotesByPriority(priority: String) {
-        safeDbOperation(_getAllNotesByPriorityResponse) {
-            delay(timeToDelay.seconds)
-            val result = repository.getAllNotesByPriority(priority)
-            withContext(Dispatchers.Main) {
-                _getAllNotesByPriorityResponse.value = ResultData.Success(result)
+    fun searchNotes(title: String) {
+        viewModelScope.launch {
+            safeDbOperation(_searchNotesResponse) {
+                delay(timeToDelay.seconds)
+                val result = repository.searchNotes(title)
+                withContext(Dispatchers.Main) {
+                    _searchNotesResponse.value = ResultData.Success(result)
+                }
+            }
+        }
+    }
+
+    fun getNotesByPriority(priority: String) {
+        viewModelScope.launch {
+            safeDbOperation(_getAllNotesByPriorityResponse) {
+                delay(timeToDelay.seconds)
+                val result = repository.getAllNotesByPriority(priority)
+                withContext(Dispatchers.Main) {
+                    _getAllNotesByPriorityResponse.value = ResultData.Success(result)
+                }
             }
         }
     }

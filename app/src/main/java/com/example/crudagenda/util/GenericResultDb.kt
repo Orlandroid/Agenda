@@ -5,11 +5,12 @@ import androidx.lifecycle.LiveData
 import com.example.crudagenda.R
 
 fun <T> Fragment.observeResultGenericDb(
-    liveData: LiveData<ResultData<T>>,
+    liveData: LiveData<ResultData<T>>?,
     onError: (() -> Unit)? = null,
     errorDbMessage: String = getString(R.string.error_db),
     onSuccess: (data: T?) -> Unit,
 ) {
+    if (liveData == null) return
     liveData.observe(viewLifecycleOwner) {
         showProgress(it is ResultData.Loading)
         when (it) {

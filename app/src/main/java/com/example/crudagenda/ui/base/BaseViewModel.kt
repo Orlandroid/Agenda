@@ -22,6 +22,7 @@ abstract class BaseViewModel : ViewModel() {
             withContext(Dispatchers.IO) {
                 dbOperation()
             }
+            result.value = null
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Log.w("Error", e.message.toString())
