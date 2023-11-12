@@ -32,18 +32,28 @@ class ViewModelListaAgenda @Inject constructor(
     private val _getAllNotesByPriorityResponse = MutableLiveData<ResultData<List<Note>>>()
     val getAllNotesByPriorityResponse = _getAllNotesByPriorityResponse
 
+    private val _deleteNote = MutableLiveData<ResultData<Int>>()
+    val deleteNote = _deleteNote
+
+    private val _deleteAllNotes = MutableLiveData<ResultData<Int>>()
+    val deleteAllNotes = _deleteAllNotes
+
     private val timeToDelay = 0.4
     //private val timeToDelay = 1
 
 
     init {
-        viewModelScope.launch {
-            //getAllNotesFlow()
-        }
+        getAllNotes()
     }
 
     fun deleteAllNotes() = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteAllNotes()
+        safeDbOperation(_deleteAllNotes) {
+            delay(timeToDelay.seconds)
+            val result = repository.deleteAllNotes()
+            withContext(Dispatchers.Main) {
+                _deleteAllNotes.value = ResultData.Success(result)
+            }
+        }
     }
 
     fun getAllNotesFlow() = repository.getAllNotesFlow().flowOn(Dispatchers.IO)
@@ -85,7 +95,13 @@ class ViewModelListaAgenda @Inject constructor(
     }
 
     fun deleteNote(note: Note) = viewModelScope.launch {
-        repository.deleteNote(note)
+        safeDbOperation(_deleteNote) {
+            delay(timeToDelay.seconds)
+            val result = repository.deleteNote(note)
+            withContext(Dispatchers.Main) {
+                _deleteNote.value = ResultData.Success(result)
+            }
+        }
     }
 
 

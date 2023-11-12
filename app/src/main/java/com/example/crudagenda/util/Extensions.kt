@@ -19,10 +19,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -222,6 +225,27 @@ fun <T> Fragment.collectLifeCycleFlow(flow: Flow<T>, collector: FlowCollector<T>
     viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             flow.collect(collector)
+        }
+    }
+}
+
+fun <T> NavController.savedStateHandle(key: String, value: T) {
+    previousBackStackEntry?.savedStateHandle?.set(key, value)
+}
+
+fun <T> NavController.getLiveData(
+    viewLifecycleOwner: LifecycleOwner,
+    key: String,
+    savedStateHandle: SavedStateHandle?.() -> Unit = {},
+    listener: (T) -> Unit,
+){
+    currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.observe(viewLifecycleOwner) {
+        it?.let {
+            listener(it)
+            savedStateHandle(previousBackStackEntry?.savedStateHandle)
+            if (it == Lifecycle.Event.ON_DESTROY) {
+                previousBackStackEntry?.savedStateHandle?.remove<T>(key)
+            }
         }
     }
 }

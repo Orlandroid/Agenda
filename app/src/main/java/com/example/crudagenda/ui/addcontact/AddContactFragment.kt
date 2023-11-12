@@ -11,9 +11,11 @@ import com.example.crudagenda.db.modelo.Note
 import com.example.crudagenda.db.modelo.Priority
 import com.example.crudagenda.ui.MainActivity
 import com.example.crudagenda.ui.base.BaseFragment
+import com.example.crudagenda.ui.listaagenda.ListaAgendaFragment.Companion.SHOULD_UPDATE_LIST
 import com.example.crudagenda.util.ResultData
 import com.example.crudagenda.util.click
 import com.example.crudagenda.util.hideKeyboard
+import com.example.crudagenda.util.savedStateHandle
 import com.example.crudagenda.util.showErrorApi
 import com.example.crudagenda.util.showProgress
 import com.example.crudagenda.util.showSuccessMessage
@@ -63,6 +65,7 @@ class AddContactFragment : BaseFragment<FragmentAddNoteBinding>(R.layout.fragmen
 
                 is ResultData.Success -> {
                     showSuccessMessage {
+                        navController.savedStateHandle(SHOULD_UPDATE_LIST, true)
                         findNavController().popBackStack()
                     }
                 }

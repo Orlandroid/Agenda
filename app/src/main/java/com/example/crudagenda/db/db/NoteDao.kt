@@ -23,7 +23,7 @@ interface NoteDao {
     fun getById(id: Int): Flow<Note>
 
     @Query("DELETE  FROM note")
-    suspend fun deleteAll()
+    suspend fun deleteAll():Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note): Long

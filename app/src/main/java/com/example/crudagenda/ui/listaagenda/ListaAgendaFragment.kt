@@ -2,7 +2,6 @@ package com.example.crudagenda.ui.listaagenda
 
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.crudagenda.R
 import com.example.crudagenda.databinding.FragmentListaAgendaBinding
@@ -16,14 +15,12 @@ import com.example.crudagenda.ui.base.BaseFragment
 import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.util.createAPopMenu
-import com.example.crudagenda.util.gone
+import com.example.crudagenda.util.getLiveData
 import com.example.crudagenda.util.observeResultGenericDb
 import com.example.crudagenda.util.showInfoMessage
 import com.example.crudagenda.util.showProgress
 import com.example.crudagenda.util.toJson
-import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ListaAgendaFragment :
@@ -34,6 +31,11 @@ class ListaAgendaFragment :
     private val adapter = ListaAgendaAdapter(clicksOnNote())
 
     private var alertMessageDialog: AlertMessageDialog? = null
+
+    companion object {
+        const val SHOULD_UPDATE_LIST = "updateList"
+        const val NONE_ROW_AFFECTS = 0
+    }
 
     override fun configureToolbar() = MainActivity.ToolbarConfiguration(
         showToolbar = true, toolbarTitle = "Notas", showArrow = false, showSearchView = true
@@ -67,7 +69,7 @@ class ListaAgendaFragment :
             val priority = getPriority(position)
             adapter.setData(arrayListOf())
             if (priority == null) {
-                //viewModel.getAllNotesFlow()
+                viewModel.getAllNotes()
             } else {
                 viewModel.getNotesByPriority(priority.name)
             }
@@ -108,25 +110,24 @@ class ListaAgendaFragment :
             adapter.setData(mutableListOf())
             swipeRefreshLayout.isRefreshing = false
             showProgress(true)
-            //viewModel.getAllNotesFlow()
+            viewModel.getAllNotes()
         }
         setUpAlertDialogDelete()
+        checkUpdateList()
+    }
+
+    private fun checkUpdateList() {
+        findNavController().getLiveData<Boolean?>(viewLifecycleOwner, SHOULD_UPDATE_LIST) {
+            it?.let {
+                if (it) {
+                    viewModel.getAllNotes()
+                }
+            }
+        }
     }
 
     override fun observerViewModel() {
         super.observerViewModel()
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getAllNotesFlow().collect {
-                if (it.isEmpty()) {
-                    adapter.setData(mutableListOf())
-                    binding.tvNoData.visible()
-                } else {
-                    binding.tvNoData.gone()
-                    adapter.setData(it.toMutableList())
-                }
-                showProgress(false)
-            }
-        }
         observeResultGenericDb(viewModel.searchNotesResponse) {
             it?.let { notes ->
                 adapter.setData(mutableListOf())
@@ -145,7 +146,20 @@ class ListaAgendaFragment :
                 adapter.setData(notes.toMutableList())
             }
         }
-
+        observeResultGenericDb(viewModel.deleteNote) {
+            it?.let {
+                if (it >= NONE_ROW_AFFECTS) {
+                    viewModel.getAllNotes()
+                }
+            }
+        }
+        observeResultGenericDb(viewModel.deleteAllNotes) {
+            it?.let {
+                if (it >= NONE_ROW_AFFECTS) {
+                    viewModel.getAllNotes()
+                }
+            }
+        }
     }
 
     private fun setUpAlertDialogDelete() {
@@ -155,6 +169,7 @@ class ListaAgendaFragment :
             }
 
             override fun btnEliminar() {
+                adapter.setData(mutableListOf())
                 viewModel.deleteAllNotes()
             }
 
@@ -173,6 +188,7 @@ class ListaAgendaFragment :
         showInfoMessage(
             message = getString(R.string.delete_ask), isTwoButtonDialog = true
         ) {
+            adapter.setData(mutableListOf())
             viewModel.deleteNote(note)
         }
     }
