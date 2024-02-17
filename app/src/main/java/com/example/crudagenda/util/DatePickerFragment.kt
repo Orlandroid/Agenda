@@ -20,15 +20,4 @@ class DatePickerFragment(private val contextP: Context) : DialogFragment() {
         return DatePickerDialog(contextP, listener, year, month, day)
     }
 
-    companion object {
-        fun newInstance(
-            listener: DatePickerDialog.OnDateSetListener,
-            contextP: Context
-        ): DatePickerFragment {
-            val fragment = DatePickerFragment(contextP)
-            fragment.listener = listener
-            return fragment
-        }
-    }
-
 }

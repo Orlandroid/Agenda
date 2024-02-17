@@ -16,10 +16,12 @@ import com.example.crudagenda.util.AlertMessageDialog
 import com.example.crudagenda.util.ListenerAlertDialog
 import com.example.crudagenda.util.createAPopMenu
 import com.example.crudagenda.util.getLiveData
+import com.example.crudagenda.util.gone
 import com.example.crudagenda.util.observeResultGenericDb
 import com.example.crudagenda.util.showInfoMessage
 import com.example.crudagenda.util.showProgress
 import com.example.crudagenda.util.toJson
+import com.example.crudagenda.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -130,20 +132,17 @@ class ListaAgendaFragment :
         super.observerViewModel()
         observeResultGenericDb(viewModel.searchNotesResponse) {
             it?.let { notes ->
-                adapter.setData(mutableListOf())
-                adapter.setData(notes.toMutableList())
+                showNotesInView(notes)
             }
         }
         observeResultGenericDb(viewModel.getAllNotesResponse) {
             it?.let { notes ->
-                adapter.setData(mutableListOf())
-                adapter.setData(notes.toMutableList())
+                showNotesInView(notes)
             }
         }
         observeResultGenericDb(viewModel.getAllNotesByPriorityResponse) {
             it?.let { notes ->
-                adapter.setData(mutableListOf())
-                adapter.setData(notes.toMutableList())
+                showNotesInView(notes)
             }
         }
         observeResultGenericDb(viewModel.deleteNote) {
@@ -159,6 +158,16 @@ class ListaAgendaFragment :
                     viewModel.getAllNotes()
                 }
             }
+        }
+    }
+
+    private fun showNotesInView(notes: List<Note>) {
+        adapter.setData(mutableListOf())
+        if (notes.isEmpty()) {
+            binding.tvNoData.visible()
+        } else {
+            binding.tvNoData.gone()
+            adapter.setData(notes.toMutableList())
         }
     }
 

@@ -58,38 +58,32 @@ class ViewModelListaAgenda @Inject constructor(
 
     fun getAllNotesFlow() = repository.getAllNotesFlow().flowOn(Dispatchers.IO)
 
-    fun getAllNotes() {
-        viewModelScope.launch {
-            safeDbOperation(_getAllNotesResponse) {
-                delay(timeToDelay.seconds)
-                val result = repository.getAllNotes()
-                withContext(Dispatchers.Main) {
-                    _getAllNotesResponse.value = ResultData.Success(result)
-                }
+    fun getAllNotes() = viewModelScope.launch {
+        safeDbOperation(_getAllNotesResponse) {
+            delay(timeToDelay.seconds)
+            val result = repository.getAllNotes()
+            withContext(Dispatchers.Main) {
+                _getAllNotesResponse.value = ResultData.Success(result)
             }
         }
     }
 
-    fun searchNotes(title: String) {
-        viewModelScope.launch {
-            safeDbOperation(_searchNotesResponse) {
-                delay(timeToDelay.seconds)
-                val result = repository.searchNotes(title)
-                withContext(Dispatchers.Main) {
-                    _searchNotesResponse.value = ResultData.Success(result)
-                }
+    fun searchNotes(title: String) = viewModelScope.launch {
+        safeDbOperation(_searchNotesResponse) {
+            delay(timeToDelay.seconds)
+            val result = repository.searchNotes(title)
+            withContext(Dispatchers.Main) {
+                _searchNotesResponse.value = ResultData.Success(result)
             }
         }
     }
 
-    fun getNotesByPriority(priority: String) {
-        viewModelScope.launch {
-            safeDbOperation(_getAllNotesByPriorityResponse) {
-                delay(timeToDelay.seconds)
-                val result = repository.getAllNotesByPriority(priority)
-                withContext(Dispatchers.Main) {
-                    _getAllNotesByPriorityResponse.value = ResultData.Success(result)
-                }
+    fun getNotesByPriority(priority: String) = viewModelScope.launch {
+        safeDbOperation(_getAllNotesByPriorityResponse) {
+            delay(timeToDelay.seconds)
+            val result = repository.getAllNotesByPriority(priority)
+            withContext(Dispatchers.Main) {
+                _getAllNotesByPriorityResponse.value = ResultData.Success(result)
             }
         }
     }
